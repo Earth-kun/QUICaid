@@ -9,8 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions()
 #options.add_argument('--headless')
-#options.add_argument('--no-sandbox')
-#options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-notifications')
+options.add_argument('--disable-extensions')
+options.add_argument('--disable-popup-blocking')
+options.add_argument('--start-maximized')
+options.add_argument('--disbale-infobars')
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -21,7 +26,7 @@ WebDriverWait(driver, 5).until (
 )
 
 input_element = driver.find_element(By.NAME, 'search_query')
-input_element.send_keys("QUIC")
+input_element.send_keys("music")
 time.sleep(1)
 input_element.send_keys(Keys.ENTER)
 
@@ -31,12 +36,12 @@ WebDriverWait(driver, 5).until (
 vid = driver.find_element(By.ID, 'video-title')
 vid.click()
 
-WebDriverWait(driver, 10).until (
-	EC.presence_of_element_located((By.CLASS_NAME, 'ytp-skip-ad-button'))
-)
-time.sleep(5)
-ad1 = driver.find_element(By.CLASS_NAME, 'ytp-skip-ad-button__icon')
-ad1.click()
+#WebDriverWait(driver, 10).until (
+#	EC.presence_of_element_located((By.CLASS_NAME, 'ytp-skip-ad-button'))
+#)
+#time.sleep(5)
+#ad1 = driver.find_element(By.CLASS_NAME, 'ytp-skip-ad-button__icon')
+#ad1.click()
 
-time.sleep(60)
+time.sleep(310)
 driver.quit()
