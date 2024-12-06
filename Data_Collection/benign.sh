@@ -8,4 +8,4 @@ commands=(
 	-E separator=, -E quote=d > ./benign_flow/test$flow.csv"
 )
 
-parallel --delay 10 ::: "${commands[@]}"
+parallel --delay 3 ::: "${commands[@]}"
