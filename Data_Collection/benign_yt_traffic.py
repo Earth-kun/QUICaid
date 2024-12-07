@@ -26,7 +26,7 @@ WebDriverWait(driver, 5).until (
 )
 
 input_element = driver.find_element(By.NAME, 'search_query')
-input_element.send_keys("music")
+input_element.send_keys("news")
 time.sleep(1)
 input_element.send_keys(Keys.ENTER)
 
