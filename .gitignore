@@ -1,2 +1,6 @@
 venv
 out.csv
+Data_Collection/abnormal_flow/yt_test/
+Data_Collection/benign_flow/yt_test/
+Data_Collection/benign_flow/fb_test/
+Data_Collection/benign_flow/ig_test/
