@@ -45,15 +45,20 @@ driver.get('https://www.facebook.com/watch/')
 WebDriverWait(driver, 10).until (
 	EC.presence_of_element_located((By.CSS_SELECTOR, "[aria-label='Close']"))
 )
-vid = driver.find_element(By.CSS_SELECTOR, "[aria-label='Close']")
+close1 = driver.find_element(By.CSS_SELECTOR, "[aria-label='Close']")
+close1.click()
+
+WebDriverWait(driver, 10).until (
+	EC.presence_of_element_located((By.CSS_SELECTOR, "[aria-label='a link to a video']"))
+)
+vid = driver.find_element(By.CSS_SELECTOR, "[aria-label='a link to a video']")
 vid.click()
 
-
-WebDriverWait(driver, 5).until (
-	EC.presence_of_element_located((By.ID, 'watch_feed'))
+WebDriverWait(driver, 10).until (
+	EC.presence_of_element_located((By.CSS_SELECTOR, "[aria-label='Close']"))
 )
-vid1 = driver.find_element(By.CLASS_NAME, 'x1n2onr6')
-vid1.click()
+close2 = driver.find_element(By.CSS_SELECTOR, "[aria-label='Close']")
+close2.click()
 
 time.sleep(310)
 driver.quit()
