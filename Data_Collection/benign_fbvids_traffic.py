@@ -23,16 +23,16 @@ driver = webdriver.Chrome(service=service, options=options)
 
 driver.get('https://www.facebook.com/watch/')
 
-WebDriverWait(driver, 5).until (
-	EC.presence_of_element_located((By.NAME, 'email'))
-)
-input_email = driver.find_element(By.NAME, 'email')
-input_email.send_keys("sslnetworks1@gmail.com")
-time.sleep(1)
-input_pass = driver.find_element(By.NAME, 'pass')
-input_pass.send_keys("ilovessl")
-time.sleep(1)
-input_pass.send_keys(Keys.ENTER)
+#WebDriverWait(driver, 5).until (
+#	EC.presence_of_element_located((By.NAME, 'email'))
+#)
+#input_email = driver.find_element(By.NAME, 'email')
+#input_email.send_keys("sslnetworks1@gmail.com")
+#time.sleep(1)
+#input_pass = driver.find_element(By.NAME, 'pass')
+#input_pass.send_keys("ilovessl")
+#time.sleep(1)
+#input_pass.send_keys(Keys.ENTER)
 
 #WebDriverWait(driver, 5).until (
 #	EC.presence_of_element_located((By.ID, ':r1e:'))
@@ -57,3 +57,4 @@ vid1.click()
 
 time.sleep(310)
 driver.quit()
+
