@@ -1,7 +1,8 @@
 import numpy as np
 import copy
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-def run_prequential(setup_name, classifier, stream, drift_detector, feature_selector, n_pretrain=200):
+def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
     """
     Parameters
     ----------
@@ -13,15 +14,15 @@ def run_prequential(setup_name, classifier, stream, drift_detector, feature_sele
     n_samples, correct_predictions = 0, 0
     true_labels, pred_labels = [], []
 
-    print(f"Evaluating {setup_name} configuration.")
+    # print(f"Evaluating {setup_name} configuration.")
 
     # pretrain samples
     X_pretrain, y_pretrain = stream.next_sample(n_pretrain)
     classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
     
-    print(f"Model pretrained on {n_pretrain} samples.")
+    # print(f"Model pretrained on {n_pretrain} samples.")
 
-    while n_samples < 100000 and stream.has_more_samples():
+    while n_samples < 50000 and stream.has_more_samples():
         X, y = stream.next_sample()
         n_samples += 1
 
@@ -48,12 +49,16 @@ def run_prequential(setup_name, classifier, stream, drift_detector, feature_sele
         pred_labels.append(y_pred[0])
 
         # check for drift
-        if drift_detector is not None:
-            drift_detector.add_element(np.float64(y_pred == y))
-            if drift_detector.detected_change():
-                print(f"drift detected at {n_samples}")
+        # if drift_detector is not None:
+        #     drift_detector.add_element(np.float64(y_pred == y))
+        #     if drift_detector.detected_change():
+        #         print(f"drift detected at {n_samples}")
 
 
     # Calculate accuracy
-    accuracy = correct_predictions / n_samples
-    print(accuracy)
+    accuracy = accuracy_score(true_labels, pred_labels)
+    precision = precision_score(true_labels, pred_labels, zero_division=0)
+    recall = recall_score(true_labels, pred_labels, zero_division=0)
+    f1 = f1_score(true_labels, pred_labels, zero_division=0)
+    
+    return accuracy, precision, recall, f1
