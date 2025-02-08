@@ -2,6 +2,11 @@ import numpy as np
 import copy
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+import time
+import tracemalloc
+from tracemalloc import Snapshot
+
+
 def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
     """
     Parameters
@@ -13,6 +18,7 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
     stream.restart()
     n_samples, correct_predictions = 0, 0
     true_labels, pred_labels = [], []
+    processing_times = []
 
     # print(f"Evaluating {setup_name} configuration.")
 
@@ -24,6 +30,7 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
 
     while n_samples < 50000 and stream.has_more_samples():
         X, y = stream.next_sample()
+        start = time.perf_counter()
         n_samples += 1
 
         if feature_selector is not None:
@@ -53,6 +60,8 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
         #     drift_detector.add_element(np.float64(y_pred == y))
         #     if drift_detector.detected_change():
         #         print(f"drift detected at {n_samples}")
+        end = time.perf_counter()
+        processing_times.append(end - start)
 
 
     # Calculate accuracy
@@ -60,5 +69,6 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200):
     precision = precision_score(true_labels, pred_labels, zero_division=0)
     recall = recall_score(true_labels, pred_labels, zero_division=0)
     f1 = f1_score(true_labels, pred_labels, zero_division=0)
-    
-    return accuracy, precision, recall, f1
+    avg_processing_time = sum(processing_times) / len(processing_times)
+
+    return accuracy, precision, recall, f1, avg_processing_time
