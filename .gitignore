@@ -1,3 +1,6 @@
 venv
 out.csv
 prequential.cpython-39.pyc
+Data_Collection/benign_flow
+Data_Collection/abnormal_flow
+Data_Collection/fuzzing_flow
