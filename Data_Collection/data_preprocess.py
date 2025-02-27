@@ -1,3 +1,4 @@
+import os
 # For data transformation
 import pandas as pd            
 # For statistical analysis
@@ -5,6 +6,7 @@ import numpy as np
 import statistics as stats
 # For ASN lookup
 import pyasn
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 asndb = pyasn.pyasn('ipasn_20140513.dat')
 
 def process_flow_stats(arr_values, prefix=''):
@@ -233,37 +235,38 @@ ipsrc = "10.10.3.10"
 cat = "Streaming"
 label = "0"
 
+# TODO: Fix dst_asn, flow_pkt_rate, flow_byte_rate, min_bytes, ave_bytes, std_bytes, var_bytes, max_fwd_bytes, min_fwd_bytes, avg_fwd_bytes, std_fwd_bytes, var_fwd_bytes, max_iat, min_iat, avg_iat, std_iat, var_iat, fwd_duration, max_fwd_iat, min_fwd_iat, avg_fwd_iat, std_fwd_iat, var_fwd_iat, rev_duration, max_rev_iat, min_rev_iat, avg_rev_iat, std_rev_iat, var_rev_iat
+
 # Process the flows
 flows = process_flows(df, ipsrc, cat, label)
 
-print(flows)
-
 # Save the flows to CSV
-# flow_df = pd.DataFrame(flows)
-# column_names = [
-#     "dst_port", "dst_asn", "quic_ver", "duration", "category", "ratio", 
-#     "flow_pkt_rate", "flow_byte_rate", "total_pkts", "total_bytes",
-#     "max_bytes", "min_bytes", "avg_bytes", "std_bytes", "var_bytes",
-#     "fwd_pkts", "fwd_bytes", 
-#     "max_fwd_bytes", "min_fwd_bytes", "avg_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
-#     "rev_pkts", "rev_bytes",
-#     "max_rev_bytes", "min_rev_bytes", "avg_rev_bytes", "std_rev_bytes", "var_rev_bytes",
-#     "max_iat", "min_iat", "avg_iat", "std_iat", "var_iat",
-#     "fwd_duration",
-#     "max_fwd_iat", "min_fwd_iat", "avg_fwd_iat", "std_fwd_iat", "var_fwd_iat",
-#     "rev_duration",
-#     "max_rev_iat", "min_rev_iat", "avg_rev_iat", "std_rev_iat", "var_rev_iat",
-#     "label"
-# ]
+flow_df = pd.DataFrame(flows)
+column_names = [
+    "dst_port", "dst_asn", "quic_ver", "duration", "category", "ratio", 
+    "flow_pkt_rate", "flow_byte_rate", "total_pkts", "total_bytes",
+    "max_bytes", "min_bytes", "avg_bytes", "std_bytes", "var_bytes",
+    "fwd_pkts", "fwd_bytes", 
+    "max_fwd_bytes", "min_fwd_bytes", "avg_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
+    "rev_pkts", "rev_bytes",
+    "max_rev_bytes", "min_rev_bytes", "avg_rev_bytes", "std_rev_bytes", "var_rev_bytes",
+    "max_iat", "min_iat", "avg_iat", "std_iat", "var_iat",
+    "fwd_duration",
+    "max_fwd_iat", "min_fwd_iat", "avg_fwd_iat", "std_fwd_iat", "var_fwd_iat",
+    "rev_duration",
+    "max_rev_iat", "min_rev_iat", "avg_rev_iat", "std_rev_iat", "var_rev_iat",
+    "label"
+]
 
-# flow_df.columns = column_names
+flow_df.columns = column_names
 
 
 # Append to existing file or create new one
-# output_file = "./benign_flow/benign.csv"
-# try:
-#     existing_df = pd.read_csv(output_file)
-#     combined_df = pd.concat([existing_df, flow_df], ignore_index=True)
-#     combined_df.to_csv(output_file, index=False)
-# except FileNotFoundError:
-#     flow_df.to_csv(output_file, index=False)
+output_file = "./benign_flow/benign1.csv"
+try:
+    # existing_df = pd.read_csv(output_file)
+    # combined_df = pd.concat([existing_df, flow_df], ignore_index=True)
+    # combined_df.to_csv(output_file, index=False)
+    flow_df.to_csv(output_file, index = False)
+except FileNotFoundError:
+    flow_df.to_csv(output_file, index=False)
