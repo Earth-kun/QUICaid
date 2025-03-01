@@ -3,10 +3,11 @@ import copy
 from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from skmultiflow.drift_detection import ADWIN
 
 import time
 
-def run_prequential(classifier, stream, feature_selector, n_pretrain=200, preq_samples=50000):
+def run_prequential(classifier, stream, feature_selector=None, drift_detector=ADWIN(), n_pretrain=200, preq_samples=50000):
     stream.restart()
     n_samples, correct_predictions = 0, 0
     true_labels, pred_labels = [], []
@@ -16,13 +17,13 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200, preq_s
     # print(f"Evaluating {setup_name} configuration.")
 
     # pretrain samples
-    for _ in range(n_pretrain):
-        X_pretrain, y_pretrain = stream.next_sample()
-        # print(dict(enumerate(*X_pretrain)))
-        if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-            classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
-        else:
-            classifier.learn_one(dict(enumerate(*X_pretrain)))
+    # for _ in range(n_pretrain):
+    #     X_pretrain, y_pretrain = stream.next_sample()
+    #     # print(dict(enumerate(*X_pretrain)))
+    #     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+    #         classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
+    #     else:
+    #         classifier.learn_one(dict(enumerate(*X_pretrain)))
     
     # print(f"Model pretrained on {n_pretrain} samples.")
 
@@ -73,10 +74,12 @@ def run_prequential(classifier, stream, feature_selector, n_pretrain=200, preq_s
             pred_labels.append(y_pred)
 
         # check for drift
-        # if drift_detector is not None:
-        #     drift_detector.add_element(np.float64(y_pred == y))
-        #     if drift_detector.detected_change():
-        #         print(f"drift detected at {n_samples}")
+        if drift_detector is not None:
+            drift_detector.add_element(np.float64(y_pred == y))
+            if drift_detector.detected_change():
+                print(f"drift detected at {n_samples}")
+                # classifier.reset()
+        
         end = time.perf_counter()
         processing_times.append(end - start)
 
