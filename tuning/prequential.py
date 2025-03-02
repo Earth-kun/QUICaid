@@ -74,10 +74,10 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detector=AD
             pred_labels.append(y_pred)
 
         # check for drift
-        if drift_detector is not None:
-            drift_detector.add_element(np.float64(y_pred == y))
-            if drift_detector.detected_change():
-                print(f"drift detected at {n_samples}")
+        # if drift_detector is not None:
+        #     drift_detector.add_element(np.float64(y_pred == y))
+        #     if drift_detector.detected_change():
+        #         print(f"drift detected at {n_samples}")
                 # classifier.reset()
         
         end = time.perf_counter()
