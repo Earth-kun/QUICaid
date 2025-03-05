@@ -59,7 +59,7 @@ def is_flow_boundary(index, df, ctr):
         return True
     
     # Check for time gap greater than 1.0 second
-    if index > 0 and df.at[index, 'DURATION'] - df.at[index - 1, 'DURATION'] > 1.0:
+    if index > 0 and abs.(df.at[index, 'DURATION'] - df.at[index - 1, 'DURATION']) > 1.0:
         return True
     
     return False
@@ -127,7 +127,6 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
             asns = []
             versions = []
             ctr = 0
-            init_dur = row['DURATION']
         else:
             # Process regular packet in the middle of a flow
             if ctr == 0:
