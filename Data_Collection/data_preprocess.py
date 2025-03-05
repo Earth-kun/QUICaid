@@ -1,13 +1,54 @@
 import os
+
 # For data transformation
 import pandas as pd            
+
 # For statistical analysis
 import numpy as np
 import statistics as stats
+
 # For ASN lookup
 import pyasn
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 asndb = pyasn.pyasn('ipasn_20140513.dat')
+
+# For profiling
+import time
+import psutil
+import cProfile
+import pstats
+from memory_profiler import profile as memory_profile
+from functools import wraps
+
+# Initialize profiling variables
+start_time = time.time()
+process = psutil.Process(os.getpid())
+initial_memory = process.memory_info().rss / 1024 / 1024  # MB
+
+# Profiling decorator
+def profile_function(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Time profiling
+        func_start_time = time.time()
+        
+        # Memory profiling
+        mem_before = process.memory_info().rss / 1024 / 1024  # MB
+        
+        # Execute the function
+        result = func(*args, **kwargs)
+        
+        # Calculate metrics
+        func_duration = time.time() - func_start_time
+        mem_after = process.memory_info().rss / 1024 / 1024  # MB
+        mem_used = mem_after - mem_before
+        
+        print(f"Function {func.__name__}:")
+        print(f"  Time: {func_duration:.4f} seconds")
+        print(f"  Memory: {mem_used:.2f} MB ({mem_before:.2f} MB -> {mem_after:.2f} MB)")
+        
+        return result
+    return wrapper
 
 def process_flow_stats(arr_values, prefix=''):
     """Calculate statistics for an array of values"""
@@ -66,8 +107,12 @@ def get_asn(ip):
     try:
         return asndb.lookup(ip)[0]
     except:
-        false_ip = ip.split(",")[0]
-        return asndb.lookup(false_ip)[0]
+        try:
+            false_ip = ip.split(",")[0]
+            return asndb.lookup(false_ip)[0]
+        except Exception as e:
+            print(f"ASN lookup failed for IP {ip}: {str(e)}")
+            return 0  # Default ASN if lookup fails
 
 def process_packet(row, ipsrc, init_dur):
     """Process a packet and return relevant features"""
@@ -89,6 +134,7 @@ def process_packet(row, ipsrc, init_dur):
         'ver': row['QUIC_VERSION']
     }
 
+@profile_function
 def process_flows(df, ipsrc, category="Streaming", label="0"):
     """Process network packets into flows with statistical features"""
     flows = []
@@ -101,16 +147,28 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
     versions = []
     ctr = 0
     init_dur = df.at[0, 'DURATION'] if len(df) > 0 else 0
+
+    # Track bottlenecks
+    packet_processing_time = 0
+    flow_calculation_time = 0
+    boundary_check_time = 0
     
     for index, row in df.iterrows():
         # Show progress
         if index % 1000 == 0:
             print(f"{index / len(df) * 100:.2f}%")
+
+        # Time boundary check
+        t1 = time.time()
+        is_boundary = is_flow_boundary(index, df, ctr)
+        boundary_check_time += (time.time() - t1)
         
         # Check if we've reached the end of a flow
         if is_flow_boundary(index, df, ctr):
             # Process this last packet too
+            t1 = time.time()
             packet = process_packet(row, ipsrc, init_dur)
+            packet_processing_time += (time.time() - t1)
             
             if packet['is_forward']:
                 fwd_packets.append(packet)
@@ -121,8 +179,11 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
             asns.append(packet['asn'])
             versions.append(packet['ver'])
             
-            # Calculate flow statistics
+             # Calculate flow statistics
+            t1 = time.time()
             flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, label)
+            flow_calculation_time += (time.time() - t1)
+
             flows.append(flow_stats)
             
             # Reset for next flow
@@ -137,7 +198,9 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
             if ctr == 0:
                 init_dur = row['DURATION']
                 
+            t1 = time.time()
             packet = process_packet(row, ipsrc, init_dur)
+            packet_processing_time += (time.time() - t1)
             
             if packet['is_forward']:
                 fwd_packets.append(packet)
@@ -149,6 +212,11 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
             versions.append(packet['ver'])
             ctr += 1
     
+    print(f"Bottleneck analysis:")
+    print(f"  Packet processing: {packet_processing_time:.4f} seconds")
+    print(f"  Flow calculation: {flow_calculation_time:.4f} seconds")
+    print(f"  Boundary checking: {boundary_check_time:.4f} seconds")
+
     return flows
 
 def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, label):
@@ -218,54 +286,97 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, l
         label
     ]
 
-# input csv
-input_file = "./benign_flow/yt_test/test10.csv"
-df = pd.read_csv(input_file)
+def main():
+    # Track overall execution
+    global start_time
+    
+    # input csv
+    input_file = "./benign_flow/master_file.csv"
+    print(f"Reading CSV file: {input_file}")
+    read_start = time.time()
+    df = pd.read_csv(input_file)
+    read_time = time.time() - read_start
+    print(f"CSV read time: {read_time:.2f} seconds")
+    print(f"DataFrame shape: {df.shape}")
+    
+    column_names = ["DURATION", "SRC_IP", "DST_IP", "SRC_PORT", "DST_PORT", "QUIC_VERSION", "BYTES", "PROTOCOL"]
+    df.columns = column_names
+    
+    # delete protocol column
+    if "PROTOCOL" in df.columns:
+        df = df.drop("PROTOCOL", axis=1)
+    
+    df["BYTES"] = pd.to_numeric(df["BYTES"], errors='coerce').fillna(0)
+    
+    # Input parameters
+    ipsrc = "10.10.3.10"
+    label = "0"
+    
+    # Process the flows
+    print("Processing flows...")
+    flows = process_flows(df, ipsrc, label)
+    
+    # Save the flows to CSV
+    print("Creating DataFrame from flows...")
+    flow_df = pd.DataFrame(flows)
+    column_names = [
+        "dst_port", "dst_asn", "quic_ver", "dur", "ratio", 
+        "flow_pkt_rate", "flow_byte_rate", "total_pkts", "total_bytes",
+        "max_bytes", "min_bytes", "ave_bytes", "std_bytes", "var_bytes",
+        "fwd_pkts", "fwd_bytes", 
+        "max_fwd_bytes", "min_fwd_bytes", "ave_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
+        "rev_pkts", "rev_bytes",
+        "max_rev_bytes", "min_rev_bytes", "ave_rev_bytes", "std_rev_bytes", "var_rev_bytes",
+        "max_iat", "min_iat", "ave_iat", "std_iat", "var_iat",
+        "fwd_dur",
+        "max_fwd_iat", "min_fwd_iat", "ave_fwd_iat", "std_fwd_iat", "var_fwd_iat",
+        "rev_dur",
+        "max_rev_iat", "min_rev_iat", "ave_rev_iat", "std_rev_iat", "var_rev_iat",
+        "label"
+    ]
+    
+    flow_df.columns = column_names
+    
+    # Append to existing file or create new one
+    output_file = "./benign_flow/master_file.csv"
+    print(f"Saving to {output_file}")
+    write_start = time.time()
+    try:
+        # existing_df = pd.read_csv(output_file)
+        # combined_df = pd.concat([existing_df, flow_df], ignore_index=True)
+        # combined_df.to_csv(output_file, index=False)
+        flow_df.to_csv(output_file, index=False)
+    except FileNotFoundError:
+        flow_df.to_csv(output_file, index=False)
+    
+    write_time = time.time() - write_start
+    print(f"CSV write time: {write_time:.2f} seconds")
+    
+    # Final memory usage
+    final_memory = process.memory_info().rss / 1024 / 1024
+    
+    # Print profiling summary
+    total_time = time.time() - start_time
+    
+    print("\n===== PROFILING SUMMARY =====")
+    print(f"Total execution time: {total_time:.2f} seconds")
+    print(f"Initial memory: {initial_memory:.2f} MB")
+    print(f"Final memory: {final_memory:.2f} MB")
+    print(f"Memory increase: {final_memory - initial_memory:.2f} MB")
+    print(f"Input rows: {len(df)}")
+    print(f"Output flows: {len(flow_df)}")
+    print(f"Rows processed per second: {len(df)/total_time:.2f}")
+    print(f"Flows generated per second: {len(flow_df)/total_time:.2f}")
+    print(f"CSV reading: {read_time:.2f} seconds ({read_time/total_time*100:.1f}%)")
+    print(f"CSV writing: {write_time:.2f} seconds ({write_time/total_time*100:.1f}%)")
+    print(f"Processing: {total_time - read_time - write_time:.2f} seconds ({(total_time - read_time - write_time)/total_time*100:.1f}%)")
+    print("============================")
 
-column_names = ["DURATION", "SRC_IP", "DST_IP", "SRC_PORT", "DST_PORT", "QUIC_VERSION", "BYTES", "PROTOCOL"]
-df.columns = column_names
-
-# delete protocol column
-df = df.drop("PROTOCOL", axis=1)
-
-df["BYTES"] = pd.to_numeric(df["BYTES"], errors='coerce').fillna(0)
-
-# Input parameters
-ipsrc = "10.10.3.10"
-label = "0"
-
-# TODO: Fix dst_asn, flow_pkt_rate, flow_byte_rate, min_bytes, ave_bytes, std_bytes, var_bytes, max_fwd_bytes, min_fwd_bytes, avg_fwd_bytes, std_fwd_bytes, var_fwd_bytes, max_iat, min_iat, avg_iat, std_iat, var_iat, fwd_duration, max_fwd_iat, min_fwd_iat, avg_fwd_iat, std_fwd_iat, var_fwd_iat, rev_duration, max_rev_iat, min_rev_iat, avg_rev_iat, std_rev_iat, var_rev_iat
-
-# Process the flows
-flows = process_flows(df, ipsrc, label)
-
-# Save the flows to CSV
-flow_df = pd.DataFrame(flows)
-column_names = [
-    "dst_port", "dst_asn", "quic_ver", "dur", "ratio", 
-    "flow_pkt_rate", "flow_byte_rate", "total_pkts", "total_bytes",
-    "max_bytes", "min_bytes", "ave_bytes", "std_bytes", "var_bytes",
-    "fwd_pkts", "fwd_bytes", 
-    "max_fwd_bytes", "min_fwd_bytes", "ave_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
-    "rev_pkts", "rev_bytes",
-    "max_rev_bytes", "min_rev_bytes", "ave_rev_bytes", "std_rev_bytes", "var_rev_bytes",
-    "max_iat", "min_iat", "ave_iat", "std_iat", "var_iat",
-    "fwd_dur",
-    "max_fwd_iat", "min_fwd_iat", "ave_fwd_iat", "std_fwd_iat", "var_fwd_iat",
-    "rev_dur",
-    "max_rev_iat", "min_rev_iat", "ave_rev_iat", "std_rev_iat", "var_rev_iat",
-    "label"
-]
-
-flow_df.columns = column_names
-
-
-# Append to existing file or create new one
-output_file = "./benign_flow/master_file.csv"
-try:
-    # existing_df = pd.read_csv(output_file)
-    # combined_df = pd.concat([existing_df, flow_df], ignore_index=True)
-    # combined_df.to_csv(output_file, index=False)
-    flow_df.to_csv(output_file, index = False)
-except FileNotFoundError:
-    flow_df.to_csv(output_file, index=False)
+# Use cProfile to get detailed function-level profiling
+if __name__ == "__main__":
+    profiler = cProfile.Profile()
+    profiler.enable()
+    main()
+    profiler.disable()
+    stats = pstats.Stats(profiler).sort_stats('cumtime')
+    stats.print_stats(20)  # Print top 20 functions by cumulative time
