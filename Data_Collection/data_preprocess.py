@@ -15,7 +15,7 @@ def process_flow_stats(arr_values, prefix=''):
         return {
             f"{prefix}max": 0,
             f"{prefix}min": 0,
-            f"{prefix}avg": 0,
+            f"{prefix}ave": 0,
             f"{prefix}std": 0,
             f"{prefix}var": 0
         }
@@ -24,7 +24,7 @@ def process_flow_stats(arr_values, prefix=''):
     return {
         f"{prefix}max": np.max(arr),
         f"{prefix}min": np.min(arr),
-        f"{prefix}avg": np.mean(arr),
+        f"{prefix}ave": np.mean(arr),
         f"{prefix}std": np.std(arr),
         f"{prefix}var": np.var(arr)
     }
@@ -33,14 +33,12 @@ def get_mode(arr):
     """Get mode from array, handling potential errors"""
     if not arr:
         return None
-    filtered_arr = [x for x in arr if isinstance(x, (int, float))]
-    if not filtered_arr:
-        return None
     try:
-        return stats.mode(filtered_arr)
+        return stats.mode(arr)
     except:
         # If stats.mode fails, return most common value
         from collections import Counter
+        filtered_arr = [x for x in arr if isinstance(x, (int, float))]
         return Counter(filtered_arr).most_common(1)[0][0]
 
 def get_version_mode(arr):
@@ -59,10 +57,17 @@ def is_flow_boundary(index, df, ctr):
         return True
     
     # Check for time gap greater than 1.0 second
-    if index > 0 and abs.(df.at[index, 'DURATION'] - df.at[index - 1, 'DURATION']) > 1.0:
+    if index > 0 and abs(df.at[index, 'DURATION'] - df.at[index - 1, 'DURATION']) > 1.0:
         return True
     
     return False
+
+def get_asn(ip):
+    try:
+        return asndb.lookup(ip)[0]
+    except:
+        false_ip = ip.split(",")[0]
+        return asndb.lookup(false_ip)[0]
 
 def process_packet(row, ipsrc, init_dur):
     """Process a packet and return relevant features"""
@@ -70,10 +75,10 @@ def process_packet(row, ipsrc, init_dur):
     
     if is_forward:
         port = row['DST_PORT']
-        asn = asndb.lookup(row['DST_IP'])[0]
+        asn = get_asn(row['DST_IP'])
     else:
         port = row['SRC_PORT']
-        asn = asndb.lookup(row['SRC_IP'])[0]
+        asn = get_asn(row['SRC_IP'])
         
     return {
         'is_forward': is_forward,
@@ -117,7 +122,7 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
             versions.append(packet['ver'])
             
             # Calculate flow statistics
-            flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, category, label)
+            flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, label)
             flows.append(flow_stats)
             
             # Reset for next flow
@@ -146,7 +151,7 @@ def process_flows(df, ipsrc, category="Streaming", label="0"):
     
     return flows
 
-def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, category, label):
+def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, label):
     """Calculate statistical features for a complete flow"""
     # Get basic flow metrics
     dst_port = get_mode(ports)
@@ -162,11 +167,7 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, c
     # Calculate duration and packet counts
     fwd_pkt = len(fwd_packets)
     rev_pkt = len(rev_packets)
-    
-    if fwd_pkt == 0 or rev_pkt == 0:
-        ratio = 0 if fwd_pkt == 0 else float('inf')
-    else:
-        ratio = fwd_pkt / rev_pkt
+    ratio = 1 if rev_pkt > fwd_pkt else 0
         
     # Calculate total values
     fwd_bytes_sum = sum(fwd_bytes)
@@ -197,22 +198,22 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, c
     
     # Combine all features into a single list
     return [
-        dst_port, dst_asn, quic_ver, dur, category, ratio, flow_pkt, flow_bytes, tot_pkt, tot_bytes,
-        combined_bytes_stats['max'], combined_bytes_stats['min'], combined_bytes_stats['avg'], 
+        dst_port, dst_asn, quic_ver, dur, ratio, flow_pkt, flow_bytes, tot_pkt, tot_bytes,
+        combined_bytes_stats['max'], combined_bytes_stats['min'], combined_bytes_stats['ave'], 
         combined_bytes_stats['std'], combined_bytes_stats['var'],
         fwd_pkt, fwd_bytes_sum,
-        fwd_bytes_stats['fwd_max'], fwd_bytes_stats['fwd_min'], fwd_bytes_stats['fwd_avg'], 
+        fwd_bytes_stats['fwd_max'], fwd_bytes_stats['fwd_min'], fwd_bytes_stats['fwd_ave'], 
         fwd_bytes_stats['fwd_std'], fwd_bytes_stats['fwd_var'],
         rev_pkt, rev_bytes_sum,
-        rev_bytes_stats['rev_max'], rev_bytes_stats['rev_min'], rev_bytes_stats['rev_avg'], 
+        rev_bytes_stats['rev_max'], rev_bytes_stats['rev_min'], rev_bytes_stats['rev_ave'], 
         rev_bytes_stats['rev_std'], rev_bytes_stats['rev_var'],
-        combined_iat_stats['max'], combined_iat_stats['min'], combined_iat_stats['avg'], 
+        combined_iat_stats['max'], combined_iat_stats['min'], combined_iat_stats['ave'], 
         combined_iat_stats['std'], combined_iat_stats['var'],
         fwd_dur,
-        fwd_iat_stats['fwd_max'], fwd_iat_stats['fwd_min'], fwd_iat_stats['fwd_avg'], 
+        fwd_iat_stats['fwd_max'], fwd_iat_stats['fwd_min'], fwd_iat_stats['fwd_ave'], 
         fwd_iat_stats['fwd_std'], fwd_iat_stats['fwd_var'],
         rev_dur,
-        rev_iat_stats['rev_max'], rev_iat_stats['rev_min'], rev_iat_stats['rev_avg'], 
+        rev_iat_stats['rev_max'], rev_iat_stats['rev_min'], rev_iat_stats['rev_ave'], 
         rev_iat_stats['rev_std'], rev_iat_stats['rev_var'],
         label
     ]
@@ -231,29 +232,28 @@ df["BYTES"] = pd.to_numeric(df["BYTES"], errors='coerce').fillna(0)
 
 # Input parameters
 ipsrc = "10.10.3.10"
-cat = "Streaming"
 label = "0"
 
 # TODO: Fix dst_asn, flow_pkt_rate, flow_byte_rate, min_bytes, ave_bytes, std_bytes, var_bytes, max_fwd_bytes, min_fwd_bytes, avg_fwd_bytes, std_fwd_bytes, var_fwd_bytes, max_iat, min_iat, avg_iat, std_iat, var_iat, fwd_duration, max_fwd_iat, min_fwd_iat, avg_fwd_iat, std_fwd_iat, var_fwd_iat, rev_duration, max_rev_iat, min_rev_iat, avg_rev_iat, std_rev_iat, var_rev_iat
 
 # Process the flows
-flows = process_flows(df, ipsrc, cat, label)
+flows = process_flows(df, ipsrc, label)
 
 # Save the flows to CSV
 flow_df = pd.DataFrame(flows)
 column_names = [
-    "dst_port", "dst_asn", "quic_ver", "duration", "category", "ratio", 
+    "dst_port", "dst_asn", "quic_ver", "dur", "ratio", 
     "flow_pkt_rate", "flow_byte_rate", "total_pkts", "total_bytes",
-    "max_bytes", "min_bytes", "avg_bytes", "std_bytes", "var_bytes",
+    "max_bytes", "min_bytes", "ave_bytes", "std_bytes", "var_bytes",
     "fwd_pkts", "fwd_bytes", 
-    "max_fwd_bytes", "min_fwd_bytes", "avg_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
+    "max_fwd_bytes", "min_fwd_bytes", "ave_fwd_bytes", "std_fwd_bytes", "var_fwd_bytes",
     "rev_pkts", "rev_bytes",
-    "max_rev_bytes", "min_rev_bytes", "avg_rev_bytes", "std_rev_bytes", "var_rev_bytes",
-    "max_iat", "min_iat", "avg_iat", "std_iat", "var_iat",
-    "fwd_duration",
-    "max_fwd_iat", "min_fwd_iat", "avg_fwd_iat", "std_fwd_iat", "var_fwd_iat",
-    "rev_duration",
-    "max_rev_iat", "min_rev_iat", "avg_rev_iat", "std_rev_iat", "var_rev_iat",
+    "max_rev_bytes", "min_rev_bytes", "ave_rev_bytes", "std_rev_bytes", "var_rev_bytes",
+    "max_iat", "min_iat", "ave_iat", "std_iat", "var_iat",
+    "fwd_dur",
+    "max_fwd_iat", "min_fwd_iat", "ave_fwd_iat", "std_fwd_iat", "var_fwd_iat",
+    "rev_dur",
+    "max_rev_iat", "min_rev_iat", "ave_rev_iat", "std_rev_iat", "var_rev_iat",
     "label"
 ]
 
