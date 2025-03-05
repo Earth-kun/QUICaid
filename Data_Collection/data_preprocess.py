@@ -261,7 +261,7 @@ flow_df.columns = column_names
 
 
 # Append to existing file or create new one
-output_file = "./benign_flow/benign1.csv"
+output_file = "./benign_flow/master_file.csv"
 try:
     # existing_df = pd.read_csv(output_file)
     # combined_df = pd.concat([existing_df, flow_df], ignore_index=True)
