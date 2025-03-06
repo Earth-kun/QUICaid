@@ -135,7 +135,7 @@ def process_packet(row, ipsrc, init_dur):
     }
 
 @profile_function
-def process_flows(df, ipsrc, category="Streaming", label="0"):
+def process_flows(df, ipsrc, label):
     """Process network packets into flows with statistical features"""
     flows = []
     
@@ -291,7 +291,7 @@ def main():
     global start_time
     
     # input csv
-    input_file = "./benign_flow/master_file.csv"
+    input_file = "./fuzzing_flow/master_file.csv"
     print(f"Reading CSV file: {input_file}")
     read_start = time.time()
     df = pd.read_csv(input_file)
@@ -310,7 +310,7 @@ def main():
     
     # Input parameters
     ipsrc = "10.10.3.10"
-    label = "0"
+    label = "2" # 0 for benign, 1 for flooding, 2 for fuzzing
     
     # Process the flows
     print("Processing flows...")
@@ -338,7 +338,7 @@ def main():
     flow_df.columns = column_names
     
     # Append to existing file or create new one
-    output_file = "./benign_flow/master_file.csv"
+    output_file = "./fuzzing.csv"
     print(f"Saving to {output_file}")
     write_start = time.time()
     try:
