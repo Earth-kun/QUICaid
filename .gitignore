@@ -4,3 +4,6 @@ prequential.cpython-39.pyc
 Data_Collection/benign_flow
 Data_Collection/flooding_flow
 Data_Collection/fuzzing_flow
+merging/benign.csv
+merging/cesnet_dataset.csv
+merging/reduced_cesnet.csv
