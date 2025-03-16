@@ -22,6 +22,7 @@ LABEL = args.label
 IPSRC = args.ipsrc
 
 # Initialize ASN lookup
+# os.chdir(os.path.dirname(os.path.abspath(__file__)))
 asndb = pyasn.pyasn("ipasn_20140513.dat")
 
 columns = ["Duration", "SourceIP", "DestinationIP", "DestinationPort", "QUICVersion", "PacketLength"]
@@ -93,8 +94,8 @@ def process_packet(row, init_dur):
         
     return {
         'is_forward': is_forward,
-        'bytes': int(row['PacketLength']),
-        'iat': row['Duration'] - init_dur,
+        'bytes': row['PacketLength'],
+        'iat': float(row['Duration']) - init_dur,
         'port': port,
         'asn': asn,
         'quic_version': row['QUICVersion']
@@ -108,10 +109,10 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, l
     quic_ver = get_version_mode(versions)
     
     # Extract arrays for statistical calculations
-    fwd_bytes = [p['bytes'] for p in fwd_packets]
-    rev_bytes = [p['bytes'] for p in rev_packets]
-    fwd_iat = [p['iat'] for p in fwd_packets if p['iat'] > 0]
-    rev_iat = [p['iat'] for p in rev_packets if p['iat'] > 0]
+    fwd_bytes = [int(p['bytes']) for p in fwd_packets]
+    rev_bytes = [int(p['bytes']) for p in rev_packets]
+    fwd_iat = [float(p['iat']) for p in fwd_packets if p['iat'] > 0]
+    rev_iat = [float(p['iat']) for p in rev_packets if p['iat'] > 0]
     
     # Calculate duration and packet counts
     fwd_pkt = len(fwd_packets)
@@ -174,11 +175,13 @@ def process_flow():
         return
 
     df = pd.DataFrame(flow, columns=columns)
-    init_dur = df.at[0, 'DURATION']
+    init_dur = float(df.at[0, 'Duration'])
+    
+    df["PacketLength"] = pd.to_numeric(df["PacketLength"], errors='coerce').fillna(0)
 
     # Extract flow features
-    fwd_packets = [process_packet(row, init_dur) for _, row in df.iterrows() if process_packet(row)['is_forward']]
-    rev_packets = [process_packet(row, init_dur) for _, row in df.iterrows() if not process_packet(row)['is_forward']]
+    fwd_packets = [process_packet(row, init_dur) for _, row in df.iterrows() if process_packet(row, init_dur)['is_forward']]
+    rev_packets = [process_packet(row, init_dur) for _, row in df.iterrows() if not process_packet(row, init_dur)['is_forward']]
     
     fwd_bytes = [p['bytes'] for p in fwd_packets]
     rev_bytes = [p['bytes'] for p in rev_packets]
@@ -191,7 +194,7 @@ def process_flow():
     flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, LABEL)
 
     # Print processed features (could also save to CSV or DB)
-    print(f"Processed Flow: {flow_stats}")
+    print(f"Processed Flow: {flow_stats}\n")
 
     # Reset batch
     flow = []
