@@ -115,3 +115,18 @@ if __name__ == "__main__":
         print("Stopping...")
         stop_event.set()
         reader_thread.join()
+
+# #!/bin/bash
+
+# FIFO_FILE="/tmp/tshark_fifo"
+
+# # Create FIFO if it does not exist
+# if [[ ! -p "$FIFO_FILE" ]]; then
+#     mkfifo "$FIFO_FILE"
+# fi
+
+# # Run tshark and write output to FIFO in the background
+# tshark -T fields -e frame.number -e frame.time -e ip.src -e ip.dst -e frame.protocols -e frame.len -e _ws.col.Info > "$FIFO_FILE" &
+
+# # Run process_packets.py with user-defined parameters
+# python3 process_packets.py --timeout "$1" --label "$2" --ipsrc "$3"
