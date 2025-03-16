@@ -4,6 +4,15 @@ prequential.cpython-39.pyc
 Data_Collection/benign_flow
 Data_Collection/flooding_flow
 Data_Collection/fuzzing_flow
-merging/benign.csv
+benign.csv
+flooding.csv
+fuzzing.csv
 merging/cesnet_dataset.csv
 merging/reduced_cesnet.csv
+merged.csv
+tuning/ofs.csv
+firestuning-cleaned.out
+tuning/fires.txt
+tuning/firescleaning.py
+tuning/firestuning.out
+tuning/oneclass.csv
