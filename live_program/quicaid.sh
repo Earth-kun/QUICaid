@@ -10,7 +10,7 @@ fi
 # Run tshark for UDP QUIC traffic and write output to FIFO in the background
 tshark -Y quic -i ens18 -T fields \
     -e frame.time_relative -e ip.src -e ip.dst -e udp.dstport \
-    -e quic.version -e quic.packet_length > "$FIFO_FILE" &
+    -e quic.version -e quic.packet_length> "$FIFO_FILE" &
 
 # Run process_packets.py with user-defined parameters
 python3 parser.py --timeout "$1" --label "$2" --ipsrc "$3"
