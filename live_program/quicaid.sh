@@ -2,10 +2,14 @@
 
 FIFO_FILE="/tmp/tshark_fifo"
 
-# Create FIFO if it does not exist
-if [[ ! -p "$FIFO_FILE" ]]; then
-    mkfifo "$FIFO_FILE"
+# Remove old FIFO file if it exists
+if [[ -p "$FIFO_FILE" ]]; then
+    rm "$FIFO_FILE"
 fi
+
+# Create a fresh FIFO
+mkfifo "$FIFO_FILE"
+
 
 # Run tshark for UDP QUIC traffic and write output to FIFO in the background
 tshark -Y quic -i ens18 -T fields \
