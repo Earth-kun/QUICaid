@@ -1,0 +1,361 @@
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998670, Precision: 0.998780, Recall: 0.998560, F1: 0.998670
+Average processing time: 0.018582430292642674
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998660, Precision: 0.998780, Recall: 0.998540, F1: 0.998660
+Average processing time: 0.01862283579125302
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998980, Precision: 0.999140, Recall: 0.998820, F1: 0.998980
+Average processing time: 0.018593224209242035
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998740, Precision: 0.998999, Recall: 0.998480, F1: 0.998740
+Average processing time: 0.018569179781540296
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998750, Precision: 0.998660, Recall: 0.998840, F1: 0.998750
+Average processing time: 0.01860569991418859
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998720, Precision: 0.998860, Recall: 0.998580, F1: 0.998720
+Average processing time: 0.018561492014795077
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998790, Precision: 0.998740, Recall: 0.998840, F1: 0.998790
+Average processing time: 0.018588442110412287
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998940, Precision: 0.999240, Recall: 0.998640, F1: 0.998940
+Average processing time: 0.018587026162666734
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998760, Precision: 0.998800, Recall: 0.998720, F1: 0.998760
+Average processing time: 0.018525264062725474
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998520, Precision: 0.998540, Recall: 0.998500, F1: 0.998520
+Average processing time: 0.01855319635909982
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998760, Precision: 0.998880, Recall: 0.998640, F1: 0.998760
+Average processing time: 0.018700045289008413
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998770, Precision: 0.998820, Recall: 0.998720, F1: 0.998770
+Average processing time: 0.018615353568107822
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998650, Precision: 0.999019, Recall: 0.998280, F1: 0.998650
+Average processing time: 0.018643592356471346
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998820, Precision: 0.998980, Recall: 0.998660, F1: 0.998820
+Average processing time: 0.018520589179554955
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998880, Precision: 0.999140, Recall: 0.998620, F1: 0.998880
+Average processing time: 0.0186050790964975
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998710, Precision: 0.998860, Recall: 0.998560, F1: 0.998710
+Average processing time: 0.018694245291550178
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998860, Precision: 0.999000, Recall: 0.998720, F1: 0.998860
+Average processing time: 0.01858955635438906
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998770, Precision: 0.998920, Recall: 0.998620, F1: 0.998770
+Average processing time: 0.018656184910929297
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998710, Precision: 0.998740, Recall: 0.998680, F1: 0.998710
+Average processing time: 0.01857567565418547
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998890, Precision: 0.998940, Recall: 0.998840, F1: 0.998890
+Average processing time: 0.01856656909014331
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998630, Precision: 0.998500, Recall: 0.998760, F1: 0.998630
+Average processing time: 0.018544844065438958
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998930, Precision: 0.999220, Recall: 0.998640, F1: 0.998930
+Average processing time: 0.01858238582987571
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998980, Precision: 0.999300, Recall: 0.998660, F1: 0.998980
+Average processing time: 0.01852377257854212
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998900, Precision: 0.998940, Recall: 0.998860, F1: 0.998900
+Average processing time: 0.018727688242620787
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998640, Precision: 0.998700, Recall: 0.998580, F1: 0.998640
+Average processing time: 0.018565157945654356
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998890, Precision: 0.999080, Recall: 0.998700, F1: 0.998890
+Average processing time: 0.0186406980825332
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998610, Precision: 0.998700, Recall: 0.998520, F1: 0.998610
+Average processing time: 0.018634815258868037
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998760, Precision: 0.998920, Recall: 0.998600, F1: 0.998760
+Average processing time: 0.018687615151295904
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998970, Precision: 0.999040, Recall: 0.998900, F1: 0.998970
+Average processing time: 0.0187292431713338
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998750, Precision: 0.998900, Recall: 0.998600, F1: 0.998750
+Average processing time: 0.018572188308038747
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998810, Precision: 0.998740, Recall: 0.998880, F1: 0.998810
+Average processing time: 0.018781538482368923
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998740, Precision: 0.998660, Recall: 0.998820, F1: 0.998740
+Average processing time: 0.01870251436682418
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998750, Precision: 0.998840, Recall: 0.998660, F1: 0.998750
+Average processing time: 0.018679461238412187
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998500, Precision: 0.998640, Recall: 0.998360, F1: 0.998500
+Average processing time: 0.01852972377072554
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998590, Precision: 0.998540, Recall: 0.998640, F1: 0.998590
+Average processing time: 0.018491350606747437
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998930, Precision: 0.999060, Recall: 0.998800, F1: 0.998930
+Average processing time: 0.018462133942632936
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998950, Precision: 0.999000, Recall: 0.998900, F1: 0.998950
+Average processing time: 0.01872923792259069
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998900, Precision: 0.998960, Recall: 0.998840, F1: 0.998900
+Average processing time: 0.018576503726935478
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998590, Precision: 0.998819, Recall: 0.998360, F1: 0.998590
+Average processing time: 0.01853254506525118
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998610, Precision: 0.998620, Recall: 0.998600, F1: 0.998610
+Average processing time: 0.018567745742986443
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998640, Precision: 0.998820, Recall: 0.998460, F1: 0.998640
+Average processing time: 0.018521446477989666
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998660, Precision: 0.998979, Recall: 0.998340, F1: 0.998660
+Average processing time: 0.018674522136060988
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998860, Precision: 0.998800, Recall: 0.998920, F1: 0.998860
+Average processing time: 0.018744836459055076
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998670, Precision: 0.998600, Recall: 0.998740, F1: 0.998670
+Average processing time: 0.01863037753978744
+Evaluating parameters: {'lr_mu': 0.01, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998570, Precision: 0.998680, Recall: 0.998460, F1: 0.998570
+Average processing time: 0.018561036928868853
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998930, Precision: 0.999120, Recall: 0.998740, F1: 0.998930
+Average processing time: 0.01861395748263458
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998820, Precision: 0.998920, Recall: 0.998720, F1: 0.998820
+Average processing time: 0.018767756703696212
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998740, Precision: 0.998920, Recall: 0.998560, F1: 0.998740
+Average processing time: 0.018651409512492827
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998960, Precision: 0.998960, Recall: 0.998960, F1: 0.998960
+Average processing time: 0.018556420144075526
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998870, Precision: 0.999000, Recall: 0.998740, F1: 0.998870
+Average processing time: 0.018555931611817796
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998730, Precision: 0.998800, Recall: 0.998660, F1: 0.998730
+Average processing time: 0.01853275858304696
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998800, Precision: 0.999060, Recall: 0.998540, F1: 0.998800
+Average processing time: 0.018691358462926
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998730, Precision: 0.998800, Recall: 0.998660, F1: 0.998730
+Average processing time: 0.0185860498364293
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998700, Precision: 0.998780, Recall: 0.998620, F1: 0.998700
+Average processing time: 0.01873979352832772
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998820, Precision: 0.998940, Recall: 0.998700, F1: 0.998820
+Average processing time: 0.018646385623989625
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998590, Precision: 0.998620, Recall: 0.998560, F1: 0.998590
+Average processing time: 0.018625058117045554
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998790, Precision: 0.998780, Recall: 0.998800, F1: 0.998790
+Average processing time: 0.018539484730658588
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998820, Precision: 0.999060, Recall: 0.998580, F1: 0.998820
+Average processing time: 0.01860662430219585
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998820, Precision: 0.998860, Recall: 0.998780, F1: 0.998820
+Average processing time: 0.01869965199070284
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998710, Precision: 0.998680, Recall: 0.998740, F1: 0.998710
+Average processing time: 0.01847277634567581
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998920, Precision: 0.999200, Recall: 0.998640, F1: 0.998920
+Average processing time: 0.01853920795315178
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998440, Precision: 0.998859, Recall: 0.998020, F1: 0.998439
+Average processing time: 0.01866142020730069
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998770, Precision: 0.998840, Recall: 0.998700, F1: 0.998770
+Average processing time: 0.018609765501359943
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998690, Precision: 0.998959, Recall: 0.998420, F1: 0.998690
+Average processing time: 0.01864899336510105
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998830, Precision: 0.999119, Recall: 0.998540, F1: 0.998830
+Average processing time: 0.01863464515239
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998620, Precision: 0.998820, Recall: 0.998420, F1: 0.998620
+Average processing time: 0.01847195304148365
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998650, Precision: 0.998860, Recall: 0.998440, F1: 0.998650
+Average processing time: 0.018682572500659154
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998870, Precision: 0.998980, Recall: 0.998760, F1: 0.998870
+Average processing time: 0.018489400135842153
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998640, Precision: 0.998939, Recall: 0.998340, F1: 0.998640
+Average processing time: 0.018582416391791777
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998730, Precision: 0.998780, Recall: 0.998680, F1: 0.998730
+Average processing time: 0.01859696005427046
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998710, Precision: 0.999059, Recall: 0.998360, F1: 0.998710
+Average processing time: 0.018684335152313578
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998790, Precision: 0.998840, Recall: 0.998740, F1: 0.998790
+Average processing time: 0.018550637967640067
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998770, Precision: 0.999000, Recall: 0.998540, F1: 0.998770
+Average processing time: 0.018646870842191857
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998770, Precision: 0.998960, Recall: 0.998580, F1: 0.998770
+Average processing time: 0.018545241002421827
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998860, Precision: 0.999100, Recall: 0.998620, F1: 0.998860
+Average processing time: 0.018704767495708076
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998680, Precision: 0.998700, Recall: 0.998660, F1: 0.998680
+Average processing time: 0.01869022303046193
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998700, Precision: 0.998700, Recall: 0.998700, F1: 0.998700
+Average processing time: 0.018539001803544817
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998570, Precision: 0.998500, Recall: 0.998640, F1: 0.998570
+Average processing time: 0.01869579306291649
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998770, Precision: 0.998920, Recall: 0.998620, F1: 0.998770
+Average processing time: 0.01853679229528643
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998640, Precision: 0.998859, Recall: 0.998420, F1: 0.998640
+Average processing time: 0.018571072354489005
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998690, Precision: 0.998920, Recall: 0.998460, F1: 0.998690
+Average processing time: 0.018624736730575096
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998570, Precision: 0.998740, Recall: 0.998400, F1: 0.998570
+Average processing time: 0.018644689593503717
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998640, Precision: 0.998760, Recall: 0.998520, F1: 0.998640
+Average processing time: 0.018634650197371375
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998500, Precision: 0.998600, Recall: 0.998400, F1: 0.998500
+Average processing time: 0.01865661985067418
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998620, Precision: 0.998760, Recall: 0.998480, F1: 0.998620
+Average processing time: 0.01869619831424905
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998650, Precision: 0.998740, Recall: 0.998560, F1: 0.998650
+Average processing time: 0.018575025154463947
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998690, Precision: 0.998760, Recall: 0.998620, F1: 0.998690
+Average processing time: 0.01868876955769025
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998630, Precision: 0.998780, Recall: 0.998480, F1: 0.998630
+Average processing time: 0.018753640334750524
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998690, Precision: 0.998920, Recall: 0.998460, F1: 0.998690
+Average processing time: 0.01846762309965212
+Evaluating parameters: {'lr_mu': 0.025, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998870, Precision: 0.999000, Recall: 0.998740, F1: 0.998870
+Average processing time: 0.01854742736615939
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998680, Precision: 0.998820, Recall: 0.998540, F1: 0.998680
+Average processing time: 0.018618394257270264
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998730, Precision: 0.998860, Recall: 0.998600, F1: 0.998730
+Average processing time: 0.018718240858572537
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998830, Precision: 0.998980, Recall: 0.998680, F1: 0.998830
+Average processing time: 0.01863107462130487
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998820, Precision: 0.999119, Recall: 0.998520, F1: 0.998820
+Average processing time: 0.018608202439902816
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998790, Precision: 0.998880, Recall: 0.998700, F1: 0.998790
+Average processing time: 0.018544077961004806
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998950, Precision: 0.999060, Recall: 0.998840, F1: 0.998950
+Average processing time: 0.018652500607382973
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998780, Precision: 0.998920, Recall: 0.998640, F1: 0.998780
+Average processing time: 0.018516764434881042
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998800, Precision: 0.998960, Recall: 0.998640, F1: 0.998800
+Average processing time: 0.0185805162579054
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998740, Precision: 0.998880, Recall: 0.998600, F1: 0.998740
+Average processing time: 0.01862930271373363
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998630, Precision: 0.998800, Recall: 0.998460, F1: 0.998630
+Average processing time: 0.01874298178059282
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998780, Precision: 0.998940, Recall: 0.998620, F1: 0.998780
+Average processing time: 0.01862394089268986
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998820, Precision: 0.998920, Recall: 0.998720, F1: 0.998820
+Average processing time: 0.018677952829012648
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998620, Precision: 0.998899, Recall: 0.998340, F1: 0.998620
+Average processing time: 0.018579358368734828
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998780, Precision: 0.998960, Recall: 0.998600, F1: 0.998780
+Average processing time: 0.01855844238400692
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998640, Precision: 0.998939, Recall: 0.998340, F1: 0.998640
+Average processing time: 0.018665599366165696
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998920, Precision: 0.998960, Recall: 0.998880, F1: 0.998920
+Average processing time: 0.018661125147079582
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998860, Precision: 0.999040, Recall: 0.998680, F1: 0.998860
+Average processing time: 0.018714801770905034
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998800, Precision: 0.999119, Recall: 0.998480, F1: 0.998800
+Average processing time: 0.018578029705053196
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998870, Precision: 0.999060, Recall: 0.998680, F1: 0.998870
+Average processing time: 0.018604191667558626
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998740, Precision: 0.998960, Recall: 0.998520, F1: 0.998740
+Average processing time: 0.018808763688767795
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998600, Precision: 0.998700, Recall: 0.998500, F1: 0.998600
+Average processing time: 0.018671253649382852
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998840, Precision: 0.998960, Recall: 0.998720, F1: 0.998840
+Average processing time: 0.018601067344334442
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998580, Precision: 0.998700, Recall: 0.998460, F1: 0.998580
+Average processing time: 0.018715429302495906
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998870, Precision: 0.999060, Recall: 0.998680, F1: 0.998870
+Average processing time: 0.01876876820757985
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998930, Precision: 0.999000, Recall: 0.998860, F1: 0.998930
+Average processing time: 0.018505001910193823
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998720, Precision: 0.998900, Recall: 0.998540, F1: 0.998720
+Average processing time: 0.018763891510516405
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998650, Precision: 0.998840, Recall: 0.998460, F1: 0.998650
+Average processing time: 0.0186655272738589
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998870, Precision: 0.999080, Recall: 0.998660, F1: 0.998870
+Average processing time: 0.018729196246473585
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998740, Precision: 0.998840, Recall: 0.998640, F1: 0.998740
+Average processing time: 0.01874396132005844
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998720, Precision: 0.998720, Recall: 0.998720, F1: 0.998720
+Average processing time: 0.01864557572369231
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 1e-05}
