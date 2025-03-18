@@ -14,3 +14,6 @@ tuning/ofs.csv
 tuning/fires.txt
 tuning/firestuning.out
 tuning/oneclass.csv
+merging/benign_cesnet.csv
+firestuning-cleaned3.out
+merged_cesnet.csv
