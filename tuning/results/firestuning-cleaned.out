@@ -359,3 +359,190 @@ Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalt
 Accuracy: 0.998720, Precision: 0.998720, Recall: 0.998720, F1: 0.998720
 Average processing time: 0.01864557572369231
 Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998740, Precision: 0.998880, Recall: 0.998600, F1: 0.998740
+Average processing time: 0.018626360183479265
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998840, Precision: 0.998960, Recall: 0.998720, F1: 0.998840
+Average processing time: 0.018557654495961032
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998870, Precision: 0.999000, Recall: 0.998740, F1: 0.998870
+Average processing time: 0.018564461282696575
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998900, Precision: 0.999120, Recall: 0.998680, F1: 0.998900
+Average processing time: 0.018716347221012692
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998670, Precision: 0.998600, Recall: 0.998740, F1: 0.998670
+Average processing time: 0.018574869253279176
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998870, Precision: 0.999100, Recall: 0.998640, F1: 0.998870
+Average processing time: 0.018512985816679428
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998840, Precision: 0.998920, Recall: 0.998760, F1: 0.998840
+Average processing time: 0.018732868480887264
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998660, Precision: 0.998860, Recall: 0.998460, F1: 0.998660
+Average processing time: 0.018623233560575173
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998710, Precision: 0.998820, Recall: 0.998600, F1: 0.998710
+Average processing time: 0.018665038019751664
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998810, Precision: 0.998780, Recall: 0.998840, F1: 0.998810
+Average processing time: 0.018444944701581263
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998900, Precision: 0.999080, Recall: 0.998720, F1: 0.998900
+Average processing time: 0.018649472932659554
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998690, Precision: 0.998900, Recall: 0.998480, F1: 0.998690
+Average processing time: 0.018667631933405066
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998810, Precision: 0.998980, Recall: 0.998640, F1: 0.998810
+Average processing time: 0.018712120474555994
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998620, Precision: 0.998760, Recall: 0.998480, F1: 0.998620
+Average processing time: 0.01856482180094579
+Evaluating parameters: {'lr_mu': 0.1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998670, Precision: 0.998740, Recall: 0.998600, F1: 0.998670
+Average processing time: 0.018680408080054913
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998840, Precision: 0.998920, Recall: 0.998760, F1: 0.998840
+Average processing time: 0.018656233730397653
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998770, Precision: 0.999059, Recall: 0.998480, F1: 0.998770
+Average processing time: 0.01868517814621562
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998770, Precision: 0.998800, Recall: 0.998740, F1: 0.998770
+Average processing time: 0.018588931517121383
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998800, Precision: 0.999079, Recall: 0.998520, F1: 0.998800
+Average processing time: 0.0186216249319911
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998660, Precision: 0.998780, Recall: 0.998540, F1: 0.998660
+Average processing time: 0.018673715538913383
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998710, Precision: 0.998820, Recall: 0.998600, F1: 0.998710
+Average processing time: 0.018577974883825517
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998800, Precision: 0.998980, Recall: 0.998620, F1: 0.998800
+Average processing time: 0.018622320250004997
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998690, Precision: 0.998860, Recall: 0.998520, F1: 0.998690
+Average processing time: 0.018568476157775148
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998730, Precision: 0.998999, Recall: 0.998460, F1: 0.998730
+Average processing time: 0.018713870277225507
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998760, Precision: 0.998920, Recall: 0.998600, F1: 0.998760
+Average processing time: 0.018558923255163246
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998740, Precision: 0.998840, Recall: 0.998640, F1: 0.998740
+Average processing time: 0.018583700482102578
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998780, Precision: 0.998900, Recall: 0.998660, F1: 0.998780
+Average processing time: 0.018642057802900673
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998530, Precision: 0.998540, Recall: 0.998520, F1: 0.998530
+Average processing time: 0.018791456127201674
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998690, Precision: 0.998820, Recall: 0.998560, F1: 0.998690
+Average processing time: 0.018574315156117082
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.01, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998640, Precision: 0.998680, Recall: 0.998600, F1: 0.998640
+Average processing time: 0.01871398126867367
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998680, Precision: 0.998820, Recall: 0.998540, F1: 0.998680
+Average processing time: 0.018664621400977483
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998760, Precision: 0.998980, Recall: 0.998540, F1: 0.998760
+Average processing time: 0.018579824154207017
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998590, Precision: 0.998780, Recall: 0.998400, F1: 0.998590
+Average processing time: 0.018548467571581715
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998660, Precision: 0.998720, Recall: 0.998600, F1: 0.998660
+Average processing time: 0.018736290439092553
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998640, Precision: 0.998720, Recall: 0.998560, F1: 0.998640
+Average processing time: 0.018755307219740936
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998680, Precision: 0.998860, Recall: 0.998500, F1: 0.998680
+Average processing time: 0.018679002160197123
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998700, Precision: 0.998860, Recall: 0.998540, F1: 0.998700
+Average processing time: 0.018665919482561293
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998610, Precision: 0.998740, Recall: 0.998480, F1: 0.998610
+Average processing time: 0.018667231751114597
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998770, Precision: 0.998940, Recall: 0.998600, F1: 0.998770
+Average processing time: 0.01869789978859946
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998740, Precision: 0.998900, Recall: 0.998580, F1: 0.998740
+Average processing time: 0.01879927604103461
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998820, Precision: 0.998920, Recall: 0.998720, F1: 0.998820
+Average processing time: 0.01874776845159475
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998760, Precision: 0.998820, Recall: 0.998700, F1: 0.998760
+Average processing time: 0.01868735321319895
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998840, Precision: 0.999040, Recall: 0.998640, F1: 0.998840
+Average processing time: 0.018758574496652
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998810, Precision: 0.998960, Recall: 0.998660, F1: 0.998810
+Average processing time: 0.018849555254916196
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.025, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998710, Precision: 0.998920, Recall: 0.998500, F1: 0.998710
+Average processing time: 0.01870075610348722
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 1e-05}
+Accuracy: 0.998800, Precision: 0.998820, Recall: 0.998780, F1: 0.998800
+Average processing time: 0.018550815173115114
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.0001}
+Accuracy: 0.998630, Precision: 0.998720, Recall: 0.998540, F1: 0.998630
+Average processing time: 0.018607929997688625
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Accuracy: 0.998760, Precision: 0.998900, Recall: 0.998620, F1: 0.998760
+Average processing time: 0.018610833729754667
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.01}
+Accuracy: 0.998740, Precision: 0.998800, Recall: 0.998680, F1: 0.998740
+Average processing time: 0.018573601085634436
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.01, 'penalty_s': 0.1}
+Accuracy: 0.998890, Precision: 0.998980, Recall: 0.998800, F1: 0.998890
+Average processing time: 0.018690382526514587
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 1e-05}
+Accuracy: 0.998730, Precision: 0.998840, Recall: 0.998620, F1: 0.998730
+Average processing time: 0.018613361463081093
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.0001}
+Accuracy: 0.998700, Precision: 0.998959, Recall: 0.998440, F1: 0.998700
+Average processing time: 0.018706417398089543
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.001}
+Accuracy: 0.998700, Precision: 0.998740, Recall: 0.998660, F1: 0.998700
+Average processing time: 0.018801346265480388
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.01}
+Accuracy: 0.998620, Precision: 0.998740, Recall: 0.998500, F1: 0.998620
+Average processing time: 0.018804989166690503
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 0.1, 'penalty_s': 0.1}
+Accuracy: 0.998850, Precision: 0.999060, Recall: 0.998640, F1: 0.998850
+Average processing time: 0.018642626100354828
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 1e-05}
+Accuracy: 0.998640, Precision: 0.998680, Recall: 0.998600, F1: 0.998640
+Average processing time: 0.018644184719622134
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.0001}
+Accuracy: 0.998730, Precision: 0.998979, Recall: 0.998480, F1: 0.998730
+Average processing time: 0.018632535073752517
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.001}
+Accuracy: 0.998630, Precision: 0.998820, Recall: 0.998440, F1: 0.998630
+Average processing time: 0.01873505015789764
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.01}
+Accuracy: 0.998710, Precision: 0.998979, Recall: 0.998440, F1: 0.998710
+Average processing time: 0.018747476574850735
+Evaluating parameters: {'lr_mu': 1, 'lr_sigma': 0.1, 'penalty_r': 1, 'penalty_s': 0.1}
+Accuracy: 0.998820, Precision: 0.998900, Recall: 0.998740, F1: 0.998820
+Average processing time: 0.018590513077799697
+Grid Search Completed.
+Best Parameters: {'lr_mu': 0.01, 'lr_sigma': 0.01, 'penalty_r': 0.01, 'penalty_s': 0.001}
+Best Metrics: [0.99898, 0.9991397247119078, 0.99882, 0.9989798367738839]
+Traceback (most recent call last):
+  File "QUICaid/tuning/fires-tuning.py", line 107, in <module>
+    results_df = pd.DataFrame(results)
+NameError: name 'pd' is not defined
+srun: error: samsung-s2.hpc.eee.upd.edu.ph: task 0: Exited with exit code 1
