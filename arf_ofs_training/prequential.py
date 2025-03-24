@@ -98,7 +98,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detector=AD
     precision = precision_score(true_labels, pred_labels, zero_division=0)
     recall = recall_score(true_labels, pred_labels, zero_division=0)
     f1 = f1_score(true_labels, pred_labels, zero_division=0)
-    avg_processing_time = sum(processing_times) / len(processing_times)
     auc = roc_auc_score(true_labels, pred_labels)
-
+    avg_processing_time = sum(processing_times) / len(processing_times)
+    
     return accuracy, precision, recall, f1, auc, avg_processing_time
