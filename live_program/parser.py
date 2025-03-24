@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser(description="Process packets from FIFO and batc
 parser.add_argument("--timeout", type=int, default=1, help="Timeout in seconds between batch processing.")
 parser.add_argument("--label", type=str, default="2", help="Label for the flow analysis.")
 parser.add_argument("--ipsrc", type=str, required=True, help="Source IP for flow processing.")
+parser.add_argument("--output", type=str, default=None, help="Optional output CSV file for raw packet data")
 args = parser.parse_args()
 
 FIFO_FILE = "/tmp/tshark_fifo"
@@ -20,6 +21,7 @@ BATCH_SIZE = 30
 TIMEOUT = args.timeout
 LABEL = args.label
 IPSRC = args.ipsrc
+OUTPUT_CSV=args.output
 
 # Initialize ASN lookup
 # os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -192,6 +194,10 @@ def process_flow():
 
     # Calculate flow statistics
     flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, LABEL)
+    
+    if OUTPUT_CSV:
+        with open(OUTPUT_CSV, 'a') as flow:
+            flow.write(flow_stats)
 
     # Print processed features (could also save to CSV or DB)
     print(f"Processed Flow: {flow_stats}\n")
