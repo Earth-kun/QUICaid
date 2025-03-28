@@ -2,38 +2,40 @@ import numpy as np
 import copy
 from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
+
+from river.anomaly import OneClassSVM
+from river import feature_extraction as fx
+
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from skmultiflow.drift_detection import ADWIN
 
 import time
 
-def run_prequential(classifier, stream, feature_selector=None, drift_detector=ADWIN(), n_pretrain=200, preq_samples=50000):
+def run_prequential(classifier, stream, feature_selector=None, drift_detection=ADWIN(0.9), n_pretrain=200, preq_samples=100000):
     stream.restart()
     n_samples, correct_predictions = 0, 0
     true_labels, pred_labels = [], []
     processing_times = []
-
-    # uncomment after tuning
-    # print(f"Evaluating {setup_name} configuration.")
+    drift_idx_list = []
 
     # pretrain samples
-    # for _ in range(n_pretrain):
-    #     X_pretrain, y_pretrain = stream.next_sample()
-    #     # print(dict(enumerate(*X_pretrain)))
-    #     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-    #         classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
-    #     else:
-    #         classifier.learn_one(dict(enumerate(*X_pretrain)))
+    for _ in range(n_pretrain):
+        X_pretrain, y_pretrain = stream.next_sample()
+        if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+            classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
+        else:
+            classifier.learn_one(dict(enumerate(*X_pretrain)))
     
-    # print(f"Model pretrained on {n_pretrain} samples.")
+    print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
 
+    # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
         X, y = stream.next_sample()
         start = time.perf_counter()
         n_samples += 1
 
+        # with dynamic feature selection
         if feature_selector is not None:
-            # with dynamic feature selection
             feature_selector.weight_features(copy.copy(X), copy.copy(y))
             X_select = feature_selector.select_features(copy.copy(X), rng=np.random.default_rng())
             
@@ -65,6 +67,22 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detector=AD
             else:
                 classifier.learn_one(copy.copy(dict(enumerate(*X))))
         
+        # drift detection
+        if isinstance(drift_detection, ADWIN):
+            if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNADWINClassifier):
+                if classifier.drift_detection.detected_change():
+                    drift_idx_list.append(n_samples - 1)
+            else: # one class svm
+                drift_detection.add_element(np.float64(y_pred == y))
+                if drift_detection.detected_change():
+                    drift_idx_list.append(n_samples - 1)
+                    drift_detection.reset()
+                    # TODO: reset one class svm model
+                    classifier.anomaly_detector = (
+                        fx.RBFSampler(gamma=classifier.anomaly_detector[0].gamma) | OneClassSVM(classifier.anomaly_detector[1].nu) # change with the optimized params
+                    )
+
+        # evaluation
         if y_pred == y:
             correct_predictions += 1
         true_labels.append(y[0])
@@ -72,23 +90,21 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detector=AD
             pred_labels.append(y_pred[0])
         else:
             pred_labels.append(y_pred)
-
-        # check for drift
-        # if drift_detector is not None:
-        #     drift_detector.add_element(np.float64(y_pred == y))
-        #     if drift_detector.detected_change():
-        #         print(f"drift detected at {n_samples}")
-                # classifier.reset()
         
         end = time.perf_counter()
         processing_times.append(end - start)
+    
 
-
-    # Calculate accuracy
+    # evaluation metrics
     accuracy = accuracy_score(true_labels, pred_labels)
     precision = precision_score(true_labels, pred_labels, zero_division=0)
     recall = recall_score(true_labels, pred_labels, zero_division=0)
     f1 = f1_score(true_labels, pred_labels, zero_division=0)
     avg_processing_time = sum(processing_times) / len(processing_times)
 
-    return accuracy, precision, recall, f1, avg_processing_time
+    if feature_selector is None:
+        return [accuracy, precision, recall, f1], avg_processing_time, drift_idx_list
+    else:
+        weights_history = feature_selector.weights_history
+        selection_history = feature_selector.selected_features_history
+        return [accuracy, precision, recall, f1], avg_processing_time, selection_history, weights_history , drift_idx_list
