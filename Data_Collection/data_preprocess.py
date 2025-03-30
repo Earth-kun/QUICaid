@@ -291,7 +291,7 @@ def main():
     global start_time
     
     # input csv
-    input_file = "./fuzzing_flow/master_file.csv"
+    input_file = "./live_test1.csv"
     print(f"Reading CSV file: {input_file}")
     read_start = time.time()
     df = pd.read_csv(input_file)
@@ -310,7 +310,7 @@ def main():
     
     # Input parameters
     ipsrc = "10.10.3.10"
-    label = "2" # 0 for benign, 1 for flooding, 2 for fuzzing
+    label = "0" # 0 for benign, 1 for flooding, 2 for fuzzing
     
     # Process the flows
     print("Processing flows...")
@@ -338,7 +338,7 @@ def main():
     flow_df.columns = column_names
     
     # Append to existing file or create new one
-    output_file = "~/QUIC/live_program/live_test1.csv"
+    output_file = "./out2.csv"
     print(f"Saving to {output_file}")
     write_start = time.time()
     try:
