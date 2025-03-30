@@ -195,7 +195,7 @@ def process_flow():
     # Calculate flow statistics
     flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, LABEL)
             
-    flow_df = pd.DataFrame(flow_stats)
+    flow_df = pd.DataFrame([flow_stats])
     flow_df.to_csv(OUTPUT_CSV, sep=',', header=False, index=False, mode='a')
 
     # Print processed features (could also save to CSV or DB)
