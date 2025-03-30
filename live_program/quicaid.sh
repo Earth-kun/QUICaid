@@ -17,4 +17,4 @@ tshark -Y quic -i ens18 -T fields \
     -e quic.version -e quic.packet_length> "$FIFO_FILE" &
 
 # Run process_packets.py with user-defined parameters
-python3 parser.py --timeout "$1" --label "$2" --ipsrc "$3"
+python3 parser.py --timeout "$1" --label "$2" --ipsrc "$3" --output "$4"
