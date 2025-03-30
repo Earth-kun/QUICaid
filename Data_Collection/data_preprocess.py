@@ -338,7 +338,7 @@ def main():
     flow_df.columns = column_names
     
     # Append to existing file or create new one
-    output_file = "./fuzzing.csv"
+    output_file = "~/QUIC/live_program/live_test1.csv"
     print(f"Saving to {output_file}")
     write_start = time.time()
     try:
