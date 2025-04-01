@@ -1,12 +1,12 @@
 import numpy as np
 import copy
+
 from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
-
 from river.anomaly import OneClassSVM
 from river import feature_extraction as fx
 
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 from skmultiflow.drift_detection import ADWIN
 
 import time
@@ -26,7 +26,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
         else:
             classifier.learn_one(dict(enumerate(*X_pretrain)))
     
-    print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
+    # print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
 
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
@@ -70,14 +70,14 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
         # drift detection
         if isinstance(drift_detection, ADWIN):
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNADWINClassifier):
-                if classifier.drift_detection.detected_change():
+                if classifier.drift_detection_method.detected_change():
                     drift_idx_list.append(n_samples - 1)
             else: # one class svm
                 drift_detection.add_element(np.float64(y_pred == y))
                 if drift_detection.detected_change():
                     drift_idx_list.append(n_samples - 1)
                     drift_detection.reset()
-                    # TODO: reset one class svm model
+                    # reset one class svm model
                     classifier.anomaly_detector = (
                         fx.RBFSampler(gamma=classifier.anomaly_detector[0].gamma) | OneClassSVM(classifier.anomaly_detector[1].nu) # change with the optimized params
                     )
@@ -100,11 +100,12 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     precision = precision_score(true_labels, pred_labels, zero_division=0)
     recall = recall_score(true_labels, pred_labels, zero_division=0)
     f1 = f1_score(true_labels, pred_labels, zero_division=0)
+    auc = roc_auc_score(true_labels, pred_labels)
     avg_processing_time = sum(processing_times) / len(processing_times)
 
     if feature_selector is None:
-        return [accuracy, precision, recall, f1], avg_processing_time, drift_idx_list
+        return accuracy, precision, recall, f1, auc, avg_processing_time, drift_idx_list
     else:
         weights_history = feature_selector.weights_history
         selection_history = feature_selector.selected_features_history
-        return [accuracy, precision, recall, f1], avg_processing_time, selection_history, weights_history , drift_idx_list
+        return accuracy, precision, recall, f1, auc, avg_processing_time, selection_history, weights_history, drift_idx_list
