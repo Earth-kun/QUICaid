@@ -17,6 +17,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     true_labels, pred_labels = [], []
     processing_times = []
     drift_idx_list = []
+    pred_probabilities = []
 
     # pretrain samples
     for _ in range(n_pretrain):
