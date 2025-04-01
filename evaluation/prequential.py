@@ -70,7 +70,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
         # drift detection
         if isinstance(drift_detection, ADWIN):
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNADWINClassifier):
-                if classifier.drift_detection.detected_change():
+                if classifier.drift_detection_method.detected_change():
                     drift_idx_list.append(n_samples - 1)
             else: # one class svm
                 drift_detection.add_element(np.float64(y_pred == y))
