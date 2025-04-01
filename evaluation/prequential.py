@@ -42,9 +42,11 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             # Test first
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                 y_pred = classifier.predict(X_select)
+                y_prob = classifier.predict_proba(X_select)
             else:
                 score = classifier.score_one(dict(enumerate(*X_select)))
                 y_pred = classifier.classify(score)
+                y_prob = classifier.predict_proba_one(dict(enumerate(*X_select)))
             
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
@@ -57,9 +59,11 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             # Test first
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                 y_pred = classifier.predict(X)
+                y_prob = classifier.predict_proba(X)
             else:
                 score = classifier.score_one(dict(enumerate(*X)))
                 y_pred = classifier.classify(score)
+                y_prob = classifier.predict_proba_one(dict(enumerate(*X)))
             
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
@@ -88,8 +92,10 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
         true_labels.append(y[0])
         if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
             pred_labels.append(y_pred[0])
+            pred_probabilities.append(y_prob[0]) 
         else:
             pred_labels.append(y_pred)
+            pred_probabilities.append(y_prob[1]) 
         
         end = time.perf_counter()
         processing_times.append(end - start)
