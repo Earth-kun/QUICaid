@@ -291,7 +291,7 @@ def main():
     global start_time
     
     # input csv
-    input_file = "./live_test1.csv"
+    input_file = "./live_test2.csv"
     print(f"Reading CSV file: {input_file}")
     read_start = time.time()
     df = pd.read_csv(input_file)
@@ -338,7 +338,7 @@ def main():
     flow_df.columns = column_names
     
     # Append to existing file or create new one
-    output_file = "./out2.csv"
+    output_file = "./preprocess_out2.csv"
     print(f"Saving to {output_file}")
     write_start = time.time()
     try:
