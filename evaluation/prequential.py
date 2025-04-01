@@ -26,7 +26,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
         else:
             classifier.learn_one(dict(enumerate(*X_pretrain)))
     
-    print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
+    # print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
 
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
@@ -104,8 +104,8 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     avg_processing_time = sum(processing_times) / len(processing_times)
 
     if feature_selector is None:
-        return [accuracy, precision, recall, f1, auc], avg_processing_time, drift_idx_list
+        return accuracy, precision, recall, f1, auc, avg_processing_time, drift_idx_list
     else:
         weights_history = feature_selector.weights_history
         selection_history = feature_selector.selected_features_history
-        return [accuracy, precision, recall, f1, auc], avg_processing_time, selection_history, weights_history, drift_idx_list
+        return accuracy, precision, recall, f1, auc, avg_processing_time, selection_history, weights_history, drift_idx_list
