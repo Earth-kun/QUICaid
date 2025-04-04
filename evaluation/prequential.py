@@ -5,6 +5,7 @@ from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
 from river.anomaly import OneClassSVM
 from river import feature_extraction as fx
+from skmultiflow.data import FileStream
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 from skmultiflow.drift_detection import ADWIN
@@ -13,12 +14,17 @@ import time
 
 def run_prequential(classifier, stream, feature_selector=None, drift_detection=ADWIN(0.9), n_pretrain=200, preq_samples=100000):
     stream.restart()
-    n_samples, correct_predictions = 0, 0
+    n_samples = 0
     true_labels, pred_labels = [], []
     processing_times = []
     drift_idx_list = []
     pred_probabilities = []
+    
+    data_loader = FileStream(filepath='merged_cesnet.csv')
 
+    for _ in range(9900):
+        data_loader.next_sample()
+    
     # pretrain samples
     for _ in range(n_pretrain):
         X_pretrain, y_pretrain = stream.next_sample()
@@ -28,7 +34,8 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             classifier.learn_one(dict(enumerate(*X_pretrain)))
     
     # print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
-
+    
+    
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
         X, y = stream.next_sample()
@@ -47,7 +54,6 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             else:
                 score = classifier.score_one(dict(enumerate(*X_select)))
                 y_pred = classifier.classify(score)
-                y_prob = classifier.predict_proba_one(dict(enumerate(*X_select)))
             
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
@@ -64,7 +70,6 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             else:
                 score = classifier.score_one(dict(enumerate(*X)))
                 y_pred = classifier.classify(score)
-                y_prob = classifier.predict_proba_one(dict(enumerate(*X)))
             
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
@@ -88,15 +93,19 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     )
 
         # evaluation
-        if y_pred == y:
-            correct_predictions += 1
+            
         true_labels.append(y[0])
+        
+
         if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
             pred_labels.append(y_pred[0])
-            pred_probabilities.append(y_prob[0]) 
         else:
             pred_labels.append(y_pred)
-            pred_probabilities.append(y_prob[1]) 
+            
+        if y_prob.shape[1] >= 2:
+            pred_probabilities.append(y_prob[0][1])  # Probability of positive class
+        else:
+            pred_probabilities.append(0.0)
         
         end = time.perf_counter()
         processing_times.append(end - start)
