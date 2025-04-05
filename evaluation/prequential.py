@@ -19,11 +19,9 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     processing_times = []
     drift_idx_list = []
     pred_probabilities = []
-    
-    data_loader = FileStream(filepath='merged_cesnet.csv')
 
     for _ in range(9900):
-        data_loader.next_sample()
+        stream.next_sample()
     
     # pretrain samples
     for _ in range(n_pretrain):
@@ -32,9 +30,6 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
         else:
             classifier.learn_one(dict(enumerate(*X_pretrain)))
-    
-    # print(f"EVALUATION: Model pretrained on {n_pretrain} samples.")
-    
     
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
@@ -82,7 +77,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             if isinstance(classifier, AdaptiveRandomForestClassifier):
                 if classifier.drift_detection_method.detected_change():
                     drift_idx_list.append(n_samples - 1)
-            if isinstance(classifier, KNNADWINClassifier):
+            elif isinstance(classifier, KNNADWINClassifier):
                 if classifier.adwin.detected_change():
                     drift_idx_list.append(n_samples - 1)
             else: # one class svm
@@ -96,10 +91,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     )
 
         # evaluation
-            
         true_labels.append(y[0])
-        
-
         if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
             pred_labels.append(y_pred[0])
         else:
