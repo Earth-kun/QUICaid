@@ -5,19 +5,22 @@ from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
 from river.anomaly import OneClassSVM
 from river import feature_extraction as fx
-from skmultiflow.data import FileStream
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 from skmultiflow.drift_detection import ADWIN
 
 import time
+import warnings
 
 def run_prequential(classifier, stream, feature_selector=None, drift_detection=ADWIN(0.9), n_pretrain=200, preq_samples=100000):
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", category=UserWarning)
     stream.restart()
     n_samples = 0
     true_labels, pred_labels = [], []
     processing_times = []
     drift_idx_list = []
+    drift_detected_sum = 0
     pred_probabilities = []
 
     for _ in range(9900):
@@ -34,77 +37,88 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
         X, y = stream.next_sample()
-        start = time.perf_counter()
-        n_samples += 1
+        try:
+            if X is not None and y is not None:
+                start = time.perf_counter()
+                n_samples += 1
 
-        # with dynamic feature selection
-        if feature_selector is not None:
-            feature_selector.weight_features(copy.copy(X), copy.copy(y))
-            X_select = feature_selector.select_features(copy.copy(X), rng=np.random.default_rng())
-            
-            # Test first
-            if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-                y_pred = classifier.predict(X_select)
-                y_prob = classifier.predict_proba(X_select)
-            else:
-                score = classifier.score_one(dict(enumerate(*X_select)))
-                y_pred = classifier.classify(score)
-            
-            # Train incrementally
-            if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-                classifier.partial_fit(copy.copy(X_select), [y[0]])
-            else:
-                classifier.learn_one(copy.copy(dict(enumerate(*X_select))))
-        
-        # no feature selection
-        else:
-            # Test first
-            if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-                y_pred = classifier.predict(X)
-                y_prob = classifier.predict_proba(X)
-            else:
-                score = classifier.score_one(dict(enumerate(*X)))
-                y_pred = classifier.classify(score)
-            
-            # Train incrementally
-            if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-                classifier.partial_fit(copy.copy(X), [y[0]])
-            else:
-                classifier.learn_one(copy.copy(dict(enumerate(*X))))
-        
-        # drift detection
-        if isinstance(drift_detection, ADWIN):
-            if isinstance(classifier, AdaptiveRandomForestClassifier):
-                if classifier.drift_detection_method.detected_change():
-                    drift_idx_list.append(n_samples - 1)
-            elif isinstance(classifier, KNNADWINClassifier):
-                if classifier.adwin.detected_change():
-                    drift_idx_list.append(n_samples - 1)
-            else: # one class svm
-                drift_detection.add_element(np.float64(y_pred == y))
-                if drift_detection.detected_change():
-                    drift_idx_list.append(n_samples - 1)
-                    drift_detection.reset()
-                    # reset one class svm model
-                    classifier.anomaly_detector = (
-                        fx.RBFSampler(gamma=classifier.anomaly_detector[0].gamma) | OneClassSVM(classifier.anomaly_detector[1].nu) # change with the optimized params
-                    )
+                # with dynamic feature selection
+                if feature_selector is not None:
+                    feature_selector.weight_features(copy.copy(X), copy.copy(y))
+                    X_select = feature_selector.select_features(copy.copy(X), rng=np.random.default_rng())
+                    
+                    # Test first
+                    if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+                        y_pred = classifier.predict(X_select)
+                        y_prob = classifier.predict_proba(X_select)
+                    else:
+                        score = classifier.score_one(dict(enumerate(*X_select)))
+                        y_pred = classifier.classify(score)
+                    
+                    # Train incrementally
+                    if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+                        classifier.partial_fit(copy.copy(X_select), [y[0]])
+                    else:
+                        classifier.learn_one(copy.copy(dict(enumerate(*X_select))))
+                
+                # no feature selection
+                else:
+                    # Test first
+                    if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+                        y_pred = classifier.predict(X)
+                        y_prob = classifier.predict_proba(X)
+                    else:
+                        score = classifier.score_one(dict(enumerate(*X)))
+                        y_pred = classifier.classify(score)
+                    
+                    # Train incrementally
+                    if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+                        classifier.partial_fit(copy.copy(X), [y[0]])
+                    else:
+                        classifier.learn_one(copy.copy(dict(enumerate(*X))))
+                
+                # drift detection
+                if isinstance(drift_detection, ADWIN):
+                    if isinstance(classifier, AdaptiveRandomForestClassifier):
+                        cmp_detection_sum = 0
+                        for estimator in classifier.ensemble:
+                            cmp_detection_sum += estimator.nb_drifts_detected
+                        
+                        if cmp_detection_sum > drift_detected_sum:
+                            drift_detected_sum = cmp_detection_sum
+                            drift_idx_list.append(classifier.instances_seen)
 
-        # evaluation
-        true_labels.append(y[0])
-        if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
-            pred_labels.append(y_pred[0])
-        else:
-            pred_labels.append(y_pred)
-            
-        if y_prob.shape[1] >= 2:
-            pred_probabilities.append(y_prob[0][1])  # Probability of positive class
-        else:
-            pred_probabilities.append(0.0)
-        
-        end = time.perf_counter()
-        processing_times.append(end - start)
-    
+                    elif isinstance(classifier, KNNADWINClassifier):
+                        if classifier.adwin.detected_change():
+                            drift_idx_list.append(n_samples - 1)
+                    else: # one class svm
+                        drift_detection.add_element(np.float64(y_pred == y))
+                        if drift_detection.detected_change():
+                            drift_idx_list.append(n_samples - 1)
+                            drift_detection.reset()
+                            # reset one class svm model
+                            classifier.anomaly_detector = (
+                                fx.RBFSampler(gamma=classifier.anomaly_detector[0].gamma) | OneClassSVM(classifier.anomaly_detector[1].nu) # change with the optimized params
+                            )
+
+                # evaluation
+                true_labels.append(y[0])
+                if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+                    pred_labels.append(y_pred[0])
+                else:
+                    pred_labels.append(y_pred)
+                    
+                if y_prob.shape[1] >= 2:
+                    pred_probabilities.append(y_prob[0][1])  # Probability of positive class
+                else:
+                    pred_probabilities.append(0.0)
+                
+                end = time.perf_counter()
+                processing_times.append(end - start)
+
+        except BaseException as e:
+            print(e)
+            break
 
     # evaluation metrics
     accuracy = accuracy_score(true_labels, pred_labels)
