@@ -9,7 +9,7 @@ from river import feature_extraction as fx
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 from skmultiflow.drift_detection import ADWIN
 
-import time
+from timeit import default_timer as timer
 import warnings
 
 def run_prequential(classifier, stream, feature_selector=None, drift_detection=ADWIN(0.9), n_pretrain=200, preq_samples=100000):
@@ -20,7 +20,6 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     true_labels, pred_labels = [], []
     processing_times = []
     drift_idx_list = []
-    drift_detected_sum = 0
     pred_probabilities = []
 
     for _ in range(9900):
@@ -33,13 +32,16 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
             classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
         else:
             classifier.learn_one(dict(enumerate(*X_pretrain)))
+        
+    if isinstance(classifier, AdaptiveRandomForestClassifier):
+        prev_drift_counts = [learner.nb_drifts_detected for learner in classifier.ensemble]
     
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
         X, y = stream.next_sample()
         try:
             if X is not None and y is not None:
-                start = time.perf_counter()
+                start = timer()
                 n_samples += 1
 
                 # with dynamic feature selection
@@ -80,21 +82,18 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                 # drift detection
                 if isinstance(drift_detection, ADWIN):
                     if isinstance(classifier, AdaptiveRandomForestClassifier):
-                        cmp_detection_sum = 0
-                        for estimator in classifier.ensemble:
-                            cmp_detection_sum += estimator.nb_drifts_detected
-                        
-                        if cmp_detection_sum > drift_detected_sum:
-                            drift_detected_sum = cmp_detection_sum
-                            drift_idx_list.append(classifier.instances_seen)
+                        for i, estimator in enumerate(classifier.ensemble):
+                            if estimator.nb_drifts_detected > prev_drift_counts[i]:
+                                drift_idx_list.append(classifier.instances_seen + 9900 - 1)
+                                prev_drift_counts[i] = estimator.nb_drifts_detected
 
                     elif isinstance(classifier, KNNADWINClassifier):
                         if classifier.adwin.detected_change():
-                            drift_idx_list.append(n_samples - 1)
+                            drift_idx_list.append(n_samples + 9900 - 1)
                     else: # one class svm
                         drift_detection.add_element(np.float64(y_pred == y))
                         if drift_detection.detected_change():
-                            drift_idx_list.append(n_samples - 1)
+                            drift_idx_list.append(n_samples + 9900 - 1)
                             drift_detection.reset()
                             # reset one class svm model
                             classifier.anomaly_detector = (
@@ -113,7 +112,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                 else:
                     pred_probabilities.append(0.0)
                 
-                end = time.perf_counter()
+                end = timer()
                 processing_times.append(end - start)
 
         except BaseException as e:
@@ -125,12 +124,15 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     precision = precision_score(true_labels, pred_labels, zero_division=0)
     recall = recall_score(true_labels, pred_labels, zero_division=0)
     f1 = f1_score(true_labels, pred_labels, zero_division=0)
-    auc = roc_auc_score(true_labels, pred_probabilities)
+    roc_auc = roc_auc_score(true_labels, pred_probabilities)
+    roc_fpr, roc_tpr, _ = roc_curve(true_labels, pred_probabilities)
     avg_processing_time = sum(processing_times) / len(processing_times)
 
+    drift_idx_list = sorted(set(drift_idx_list))
+
     if feature_selector is None:
-        return accuracy, precision, recall, f1, auc, avg_processing_time, drift_idx_list
+        return accuracy, precision, recall, f1, roc_auc, roc_fpr, roc_tpr, avg_processing_time, drift_idx_list
     else:
         weights_history = feature_selector.weights_history
         selection_history = feature_selector.selected_features_history
-        return accuracy, precision, recall, f1, auc, avg_processing_time, selection_history, weights_history, drift_idx_list
+        return accuracy, precision, recall, f1, roc_auc, roc_fpr, roc_tpr, avg_processing_time, selection_history, weights_history, drift_idx_list
