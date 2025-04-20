@@ -22,20 +22,26 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
     drift_idx_list = []
     pred_probabilities = []
 
-    for _ in range(9900):
-        stream.next_sample()
+    # pretraining phase
+    if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+        # for _ in range(9900):
+        #     stream.next_sample()
+        stream.next_sample(9900)
     
-    # pretrain samples
-    for _ in range(n_pretrain):
-        X_pretrain, y_pretrain = stream.next_sample()
-        if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
+        for _ in range(n_pretrain):
+            X_pretrain, y_pretrain = stream.next_sample()
             classifier.partial_fit(X_pretrain, y_pretrain, classes=stream.target_values)
-        else:
+        
+        if isinstance(classifier, AdaptiveRandomForestClassifier):
+            prev_drift_counts = [learner.nb_drifts_detected for learner in classifier.ensemble]
+    else:
+        for _ in range(n_pretrain):
+            X_pretrain, _ = stream.next_sample()
             classifier.learn_one(dict(enumerate(*X_pretrain)))
         
-    if isinstance(classifier, AdaptiveRandomForestClassifier):
-        prev_drift_counts = [learner.nb_drifts_detected for learner in classifier.ensemble]
-    
+        stream.next_sample(9900)
+        
+
     # prequential loop
     while n_samples < preq_samples and stream.has_more_samples():
         X, y = stream.next_sample()
@@ -53,15 +59,23 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                         y_pred = classifier.predict(X_select)
                         y_prob = classifier.predict_proba(X_select)
+                        if y_prob.shape[1] >= 2:
+                            pred_probabilities.append(y_prob[0][1])  # Probability of positive class
+                        else:
+                            pred_probabilities.append(0.0)                    
+                    # OC-SVM
                     else:
                         score = classifier.score_one(dict(enumerate(*X_select)))
+                        pred_probabilities.append(score)
                         y_pred = classifier.classify(score)
+                        
                     
                     # Train incrementally
                     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                         classifier.partial_fit(copy.copy(X_select), [y[0]])
                     else:
-                        classifier.learn_one(copy.copy(dict(enumerate(*X_select))))
+                        if y_pred == 0: # train only on "benign" samples
+                            classifier.learn_one(copy.copy(dict(enumerate(*X_select))))
                 
                 # no feature selection
                 else:
@@ -69,15 +83,22 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                         y_pred = classifier.predict(X)
                         y_prob = classifier.predict_proba(X)
+                        print(y_prob)
+                        if y_prob.shape[1] >= 2:
+                            pred_probabilities.append(y_prob[0][1])  # Probability of positive class
+                        else:
+                            pred_probabilities.append(0.0) 
                     else:
                         score = classifier.score_one(dict(enumerate(*X)))
+                        pred_probabilities.append(score)
                         y_pred = classifier.classify(score)
                     
                     # Train incrementally
                     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                         classifier.partial_fit(copy.copy(X), [y[0]])
                     else:
-                        classifier.learn_one(copy.copy(dict(enumerate(*X))))
+                        if y_pred == 0: # train only on "benign" samples
+                            classifier.learn_one(copy.copy(dict(enumerate(*X))))
                 
                 # drift detection
                 if isinstance(drift_detection, ADWIN):
@@ -106,11 +127,6 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     pred_labels.append(y_pred[0])
                 else:
                     pred_labels.append(y_pred)
-                    
-                if y_prob.shape[1] >= 2:
-                    pred_probabilities.append(y_prob[0][1])  # Probability of positive class
-                else:
-                    pred_probabilities.append(0.0)
                 
                 end = timer()
                 processing_times.append(end - start)
