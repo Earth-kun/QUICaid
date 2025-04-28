@@ -17,3 +17,4 @@ tuning/oneclass.csv
 merging/benign_cesnet.csv
 firestuning-cleaned3.out
 merged_cesnet.csv
+evaluation/results-eda/*.csv
