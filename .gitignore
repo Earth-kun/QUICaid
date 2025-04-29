@@ -8,7 +8,7 @@ benign.csv
 flooding.csv
 fuzzing.csv
 merging/cesnet_dataset.csv
-merging/eda_results
+merging/eda_results/
 merging/reduced_cesnet.csv
 merged.csv
 tuning/ofs.csv
