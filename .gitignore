@@ -19,7 +19,4 @@ merging/benign_cesnet.csv
 firestuning-cleaned3.out
 merged_cesnet.csv
 evaluation/results-eda/*.csv
-live_program/live_out1.csv
-live_program/live_out2.csv
-live_program/preprocess_out1.csv
-live_program/preprocess_out2.csv
+live_program/*.csv
