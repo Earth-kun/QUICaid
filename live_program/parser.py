@@ -46,7 +46,7 @@ TIE_THRESHOLD = args.tie_threshold
 LEAF_PREDICTION = args.leaf_prediction
 
 # Initialize ASN lookup
-# os.chdir(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 asndb = pyasn.pyasn("ipasn_20140513.dat")
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
