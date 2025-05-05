@@ -14,21 +14,47 @@ parser.add_argument("--timeout", type=int, default=1, help="Timeout in seconds b
 parser.add_argument("--label", type=str, default="2", help="Label for the flow analysis.")
 parser.add_argument("--ipsrc", type=str, required=True, help="Source IP for flow processing.")
 parser.add_argument("--output", type=str, default=None, help="Optional output CSV file for raw packet data")
+parser.add_argument("--online", type=bool, default=True, help="Run in online mode.")
+parser.add_argument("--n_estimators", type=int, default=6, help="Lorem Ipsum.")
+parser.add_argument("--max_features", type=str, default="auto", help="Lorem Ipsum.")
+parser.add_argument("--drift_detection_method", type=ADWIN, default=ADWIN(0.9), help="Lorem Ipsum.")
+parser.add_argument("--warning_detection_method", type=ADWIN, default=ADWIN(0.7), help="Lorem Ipsum.")
+parser.add_argument("--grace_period", type=int, default=25, help="Lorem Ipsum.")
+parser.add_argument("--split_criterion", type=str, default="gini", help="Lorem Ipsum.")
+parser.add_argument("--split_confidence", type=float, default=0.01, help="Lorem Ipsum.")
+parser.add_argument("--tie_threshold", type=float, default=0.01, help="Lorem Ipsum.")
+parser.add_argument("--leaf_prediction", type=str, default="nba", help="Lorem Ipsum.")
 args = parser.parse_args()
 
-FIFO_FILE = "/tmp/tshark_fifo"
+TSHARK_FIFO = "/tmp/tshark_fifo"
+FLOW_FIFO = "/tmp/flow_fifo"
+
 BATCH_SIZE = 30
 TIMEOUT = args.timeout
 LABEL = args.label
 IPSRC = args.ipsrc
 OUTPUT_CSV=args.output
+ONLINE = args.online
+N_ESTIMATORS = args.n_estimators
+MAX_FEATURES = args.max_features
+DRIFT_DETECTION_METHOD = args.drift_detection_method
+WARNING_DETECTION_METHOD = args.warning_detection_method
+GRACE_PERIOD = args.grace_period
+SPLIT_CRITERION = args.split_criterion
+SPLIT_CONFIDENCE = args.split_confidence
+TIE_THRESHOLD = args.tie_threshold
+LEAF_PREDICTION = args.leaf_prediction
 
 # Initialize ASN lookup
 # os.chdir(os.path.dirname(os.path.abspath(__file__)))
 asndb = pyasn.pyasn("ipasn_20140513.dat")
 
-columns = ["Duration", "SourceIP", "DestinationIP", "DestinationPort", "QUICVersion", "PacketLength"]
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+
+true_labels, pred_labels = [], []
 flow = []
+columns = ["Duration", "SourceIP", "DestinationIP", "DestinationPort", "QUICVersion", "PacketLength"]
 stop_event = Event()
 
 def process_flow_stats(arr_values, prefix=''):
@@ -149,7 +175,7 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, l
     rev_iat_stats = process_flow_stats(rev_iat, 'rev_')
     
     # Combine all features into a single list
-    return [
+    return np.array([
         dst_port, dst_asn, quic_ver, dur, ratio, flow_pkt, flow_bytes, tot_pkt, tot_bytes,
         combined_bytes_stats['max'], combined_bytes_stats['min'], combined_bytes_stats['ave'], 
         combined_bytes_stats['std'], combined_bytes_stats['var'],
@@ -168,9 +194,9 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, l
         rev_iat_stats['rev_max'], rev_iat_stats['rev_min'], rev_iat_stats['rev_ave'], 
         rev_iat_stats['rev_std'], rev_iat_stats['rev_var'],
         label
-    ]
+    ])
 
-def process_flow():
+def process_flow(classifier):
     """Processes the collected batch using flow analysis."""
     global flow
     if not flow:
@@ -198,8 +224,19 @@ def process_flow():
     flow_df = pd.DataFrame([flow_stats])
     flow_df.to_csv(OUTPUT_CSV, sep=',', header=False, index=False, mode='a')
 
-    # Print processed features (could also save to CSV or DB)
-    #print(f"Processed Flow: {flow_stats}\n")
+    arf_params = {
+    'n_estimators': N_ESTIMATORS,
+    'max_features': MAX_FEATURES,
+    'drift_detection_method': ADWIN(0.9),
+    'warning_detection_method': ADWIN(0.7),
+    'grace_period': GRACE_PERIOD,
+    'split_criterion': SPLIT_CRITERION,
+    'split_confidence': SPLIT_CONFIDENCE,
+    'tie_threshold': TIE_THRESHOLD,
+    'leaf_prediction': LEAF_PREDICTION,
+    }
+    
+    run_prequential(AdaptiveRandomForestClassifier(**arf_params), flow_stats, ONLINE)
 
     # Reset batch
     flow = []
@@ -209,7 +246,7 @@ def read_fifo():
     global flow
     last_process_time = time.time()
 
-    with open(FIFO_FILE, "r") as fifo:
+    with open(TSHARK_FIFO, "r") as fifo:
         for line in fifo:
             fields = line.strip().split("\t")
             if len(fields) == len(columns):
@@ -223,6 +260,29 @@ def read_fifo():
             if stop_event.is_set():
                 break
 
+def run_prequential(classifier, flow, online=True):
+    """Run prequential evaluation on the classifier."""
+    X, y = flow[:-1], flow[-1]
+    try:
+        if X is not None and y is not None:
+            # Test first
+            if isinstance(classifier, AdaptiveRandomForestClassifier):
+                y_pred = classifier.predict(X)
+            
+            # Train incrementally
+            if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
+                classifier.partial_fit(copy.copy(X), [y[0]])
+
+            # evaluation
+            true_labels.append(y[0])
+            if isinstance(classifier, AdaptiveRandomForestClassifier):
+                pred_labels.append(y_pred[0])
+            
+
+    except BaseException as e:
+        print(e)
+        break
+
 if __name__ == "__main__":
     try:
         reader_thread = Thread(target=read_fifo, daemon=True)
@@ -233,6 +293,13 @@ if __name__ == "__main__":
             time.sleep(1)
 
     except KeyboardInterrupt:
-        print("Stopping...")
+        # evaluation metrics
+        accuracy = accuracy_score(true_labels, pred_labels)
+        precision = precision_score(true_labels, pred_labels, zero_division=0)
+        recall = recall_score(true_labels, pred_labels, zero_division=0)
+        f1 = f1_score(true_labels, pred_labels, zero_division=0)
+
+        print(f"Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}") 
+
         stop_event.set()
         reader_thread.join()
