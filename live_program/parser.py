@@ -17,8 +17,8 @@ parser.add_argument("--output", type=str, default=None, help="Optional output CS
 parser.add_argument("--online", type=bool, default=True, help="Run in online mode.")
 parser.add_argument("--n_estimators", type=int, default=6, help="Lorem Ipsum.")
 parser.add_argument("--max_features", type=str, default="auto", help="Lorem Ipsum.")
-parser.add_argument("--drift_detection_method", type=ADWIN, default=ADWIN(0.9), help="Lorem Ipsum.")
-parser.add_argument("--warning_detection_method", type=ADWIN, default=ADWIN(0.7), help="Lorem Ipsum.")
+# parser.add_argument("--drift_detection_method", type=ADWIN, default=ADWIN(0.9), help="Lorem Ipsum.")
+# parser.add_argument("--warning_detection_method", type=ADWIN, default=ADWIN(0.7), help="Lorem Ipsum.")
 parser.add_argument("--grace_period", type=int, default=25, help="Lorem Ipsum.")
 parser.add_argument("--split_criterion", type=str, default="gini", help="Lorem Ipsum.")
 parser.add_argument("--split_confidence", type=float, default=0.01, help="Lorem Ipsum.")
@@ -37,8 +37,8 @@ OUTPUT_CSV=args.output
 ONLINE = args.online
 N_ESTIMATORS = args.n_estimators
 MAX_FEATURES = args.max_features
-DRIFT_DETECTION_METHOD = args.drift_detection_method
-WARNING_DETECTION_METHOD = args.warning_detection_method
+# DRIFT_DETECTION_METHOD = args.drift_detection_method
+# WARNING_DETECTION_METHOD = args.warning_detection_method
 GRACE_PERIOD = args.grace_period
 SPLIT_CRITERION = args.split_criterion
 SPLIT_CONFIDENCE = args.split_confidence
