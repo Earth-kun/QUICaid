@@ -15,7 +15,6 @@ import warnings
 def run_prequential(classifier, stream, feature_selector=None, drift_detection=ADWIN(0.9), n_pretrain=200, preq_samples=100000):
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     warnings.filterwarnings("ignore", category=UserWarning)
-    stream.restart()
     n_samples = 0
     true_labels, pred_labels = [], []
     processing_times = []
@@ -83,7 +82,7 @@ def run_prequential(classifier, stream, feature_selector=None, drift_detection=A
                     if isinstance(classifier, AdaptiveRandomForestClassifier) or isinstance(classifier, KNNClassifier) or isinstance(classifier, KNNADWINClassifier):
                         y_pred = classifier.predict(X)
                         y_prob = classifier.predict_proba(X)
-                        print(y_prob)
+                        # print(y_prob)
                         if y_prob.shape[1] >= 2:
                             pred_probabilities.append(y_prob[0][1])  # Probability of positive class
                         else:
