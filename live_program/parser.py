@@ -281,7 +281,6 @@ def run_prequential(classifier, flow, online=True):
 
     except BaseException as e:
         print(e)
-        break
 
 if __name__ == "__main__":
     try:
