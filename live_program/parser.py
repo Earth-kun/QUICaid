@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import argparse
 import numpy as np
+import copy
 import statistics as stats
 import pyasn
 from threading import Thread, Event
@@ -10,8 +11,8 @@ from collections import Counter
 
 from skmultiflow.meta import AdaptiveRandomForestClassifier
 from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier
-from river.anomaly import OneClassSVM
-from river import feature_extraction as fx
+# from river.anomaly import OneClassSVM
+# from river import feature_extraction as fx
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 from skmultiflow.drift_detection import ADWIN
@@ -22,7 +23,7 @@ import warnings
 # Argument Parsing
 parser = argparse.ArgumentParser(description="Process packets from FIFO and batch them for analysis.")
 parser.add_argument("--timeout", type=int, default=1, help="Timeout in seconds between batch processing.")
-parser.add_argument("--label", type=str, default="2", help="Label for the flow analysis.")
+parser.add_argument("--label", type=int, default=0, help="Label for the flow analysis.")
 parser.add_argument("--ipsrc", type=str, required=True, help="Source IP for flow processing.")
 parser.add_argument("--output", type=str, default=None, help="Optional output CSV file for raw packet data")
 parser.add_argument("--online", type=bool, default=True, help="Run in online mode.")
@@ -38,7 +39,6 @@ parser.add_argument("--leaf_prediction", type=str, default="nba", help="Lorem Ip
 args = parser.parse_args()
 
 TSHARK_FIFO = "/tmp/tshark_fifo"
-FLOW_FIFO = "/tmp/flow_fifo"
 
 BATCH_SIZE = 30
 TIMEOUT = args.timeout
@@ -207,7 +207,7 @@ def calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, l
         label
     ])
 
-def process_flow(classifier):
+def process_flow():
     """Processes the collected batch using flow analysis."""
     global flow
     if not flow:
@@ -247,7 +247,8 @@ def process_flow(classifier):
     'leaf_prediction': LEAF_PREDICTION,
     }
     
-    run_prequential(AdaptiveRandomForestClassifier(**arf_params), flow_stats, ONLINE)
+    classifier = AdaptiveRandomForestClassifier(**arf_params)
+    run_prequential(classifier, flow_stats, ONLINE)
 
     # Reset batch
     flow = []
