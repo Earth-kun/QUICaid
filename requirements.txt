@@ -9,3 +9,4 @@ ipykernel
 float-evaluation
 pyasn
 aioquic
+wsproto
