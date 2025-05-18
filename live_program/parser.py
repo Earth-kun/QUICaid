@@ -292,6 +292,7 @@ def run_prequential(classifier, flow, online=True):
 
         # Training
         if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
+            print("Training on:", X_2d, "Label:", y)
             classifier.partial_fit(copy.copy(X_2d), [y])
 
         # Record label
