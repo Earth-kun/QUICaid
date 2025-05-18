@@ -307,6 +307,8 @@ def print_metrics():
 
     print("True label counts:", Counter(true_labels))
     print("Predicted label counts:", Counter(pred_labels))
+    print("True labels:", true_labels)
+    print("Predicted labels:", pred_labels)
 
     if len(true_labels) > 0 and len(pred_labels) > 0:
         accuracy = accuracy_score(true_labels, pred_labels)
@@ -317,10 +319,10 @@ def print_metrics():
         print("Not enough data to calculate metrics.")
 
     print("\n=== FINAL METRICS ===")
-    print(f"Accuracy:  {accuracy:.2f}")
-    print(f"Precision: {precision:.2f}")
-    print(f"Recall:    {recall:.2f}")
-    print(f"F1 Score:  {f1:.2f}")
+    print(f"Accuracy:  {accuracy:.6f}")
+    print(f"Precision: {precision:.6f}")
+    print(f"Recall:    {recall:.6f}")
+    print(f"F1 Score:  {f1:.6f}")
 
 def get_dynamic_label():
     """Reads from trigger file or flag to switch between benign/attack."""
