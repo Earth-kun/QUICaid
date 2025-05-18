@@ -275,6 +275,8 @@ def read_fifo():
 def run_prequential(classifier, flow, online=True):
     """Run prequential evaluation on the classifier."""
     try:
+        if any(x is None for x in flow[:-1]):
+            raise ValueError("Flow contains None values.")
         X = [float(x) for x in flow[:-1]]
         y = int(flow[-1])
 
@@ -295,6 +297,7 @@ def run_prequential(classifier, flow, online=True):
 
     except BaseException as e:
         print("Prequential Error:", e)
+        print("Bad flow sample:", flow)
 
 
 if __name__ == "__main__":
