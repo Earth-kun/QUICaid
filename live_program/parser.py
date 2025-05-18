@@ -274,27 +274,28 @@ def read_fifo():
 
 def run_prequential(classifier, flow, online=True):
     """Run prequential evaluation on the classifier."""
-    X, y = flow[:-1], flow[-1]
     try:
-        if X is not None and y is not None:
-            # Ensure X is 2D and y is int
-            X = [X]
-            y = int(y)
+        X = [float(x) for x in flow[:-1]]
+        y = int(flow[-1])
 
-            # Test first
-            if isinstance(classifier, AdaptiveRandomForestClassifier):
-                y_pred = classifier.predict(X)
-                pred_labels.append(y_pred[0])
+        # Make input 2D for classifier
+        X_2d = [X]
 
-            # Train incrementally
-            if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
-                classifier.partial_fit(copy.copy(X), [y])
+        # Prediction
+        if isinstance(classifier, AdaptiveRandomForestClassifier):
+            y_pred = classifier.predict(X_2d)
+            pred_labels.append(y_pred[0])
 
-            # Record true label
-            true_labels.append(y)
+        # Training
+        if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
+            classifier.partial_fit(copy.copy(X_2d), [y])
+
+        # Record label
+        true_labels.append(y)
 
     except BaseException as e:
         print("Prequential Error:", e)
+
 
 if __name__ == "__main__":
     try:
