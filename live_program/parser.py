@@ -25,7 +25,7 @@ import warnings
 # Argument Parsing
 parser = argparse.ArgumentParser(description="Process packets from FIFO and batch them for analysis.")
 parser.add_argument("--timeout", type=int, default=1, help="Timeout in seconds between batch processing.")
-parser.add_argument("--label", type=int, default=0, help="Label for the flow analysis.")
+# parser.add_argument("--label", type=int, default=0, help="Label for the flow analysis.")
 parser.add_argument("--ipsrc", type=str, required=True, help="Source IP for flow processing.")
 parser.add_argument("--output", type=str, default=None, help="Optional output CSV file for raw packet data")
 parser.add_argument("--online", type=bool, default=True, help="Run in online mode.")
@@ -44,7 +44,7 @@ TSHARK_FIFO = "/tmp/tshark_fifo"
 
 BATCH_SIZE = 30
 TIMEOUT = args.timeout
-LABEL = args.label
+LABEL = 0
 IPSRC = args.ipsrc
 OUTPUT_CSV=args.output
 ONLINE = args.online
@@ -232,7 +232,7 @@ def process_flow():
     versions = [p['quic_version'] for p in fwd_packets + rev_packets]
 
     # Calculate flow statistics
-    flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, LABEL)
+    flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, get_dynamic_label())
             
     flow_df = pd.DataFrame([flow_stats])
     flow_df.to_csv(OUTPUT_CSV, sep=',', header=False, index=False, mode='a')
@@ -321,6 +321,16 @@ def print_metrics():
     print(f"Precision: {precision:.2f}")
     print(f"Recall:    {recall:.2f}")
     print(f"F1 Score:  {f1:.2f}")
+
+def get_dynamic_label():
+    """Reads from trigger file or flag to switch between benign/attack."""
+    try:
+        with open("/tmp/label_flag.txt", "r") as f:
+            value = int(f.read().strip())
+            return value
+    except:
+        return 0
+
 
 def handle_exit(signum, frame):
     print(f"\nReceived signal {signum}. Cleaning up...")
