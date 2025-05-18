@@ -1,4 +1,6 @@
 import os
+import sys
+import signal
 import time
 import pandas as pd
 import argparse
@@ -320,19 +322,21 @@ def print_metrics():
     print(f"Recall:    {recall:.2f}")
     print(f"F1 Score:  {f1:.2f}")
 
+def handle_exit(signum, frame):
+    print(f"\nReceived signal {signum}. Cleaning up...")
+    stop_event.set()
+    reader_thread.join()
+    print_metrics()
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, handle_exit)
+signal.signal(signal.SIGINT, handle_exit)  # optional: replaces KeyboardInterrupt
+
 if __name__ == "__main__":
-    try:
-        reader_thread = Thread(target=read_fifo, daemon=True)
-        reader_thread.start()
+    reader_thread = Thread(target=read_fifo, daemon=True)
+    reader_thread.start()
 
-        print("Processing packets... Press Ctrl+C to stop.")
-        while True:
-            time.sleep(1)
+    print("Processing packets... Press Ctrl+C or send SIGTERM to stop.")
+    while True:
+        time.sleep(1)
 
-    except KeyboardInterrupt:
-        print("KeyboardInterrupt received. Stopping...")
-
-    finally:
-        stop_event.set()
-        reader_thread.join()
-        print_metrics()
