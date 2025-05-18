@@ -300,6 +300,26 @@ def run_prequential(classifier, flow, online=True):
         print("Bad flow sample:", flow)
 
 
+def print_metrics():
+    """Print evaluation metrics."""
+
+    print("True label counts:", Counter(true_labels))
+    print("Predicted label counts:", Counter(pred_labels))
+
+    if len(true_labels) > 0 and len(pred_labels) > 0:
+        acc = accuracy_score(true_labels, pred_labels)
+        prec = precision_score(true_labels, pred_labels, zero_division=0)
+        rec = recall_score(true_labels, pred_labels, zero_division=0)
+        f1 = f1_score(true_labels, pred_labels, zero_division=0)
+    else:
+        print("Not enough data to calculate metrics.")
+
+    print("\n=== FINAL METRICS ===")
+    print(f"Accuracy:  {accuracy:.2f}")
+    print(f"Precision: {precision:.2f}")
+    print(f"Recall:    {recall:.2f}")
+    print(f"F1 Score:  {f1:.2f}")
+
 if __name__ == "__main__":
     try:
         reader_thread = Thread(target=read_fifo, daemon=True)
@@ -310,19 +330,9 @@ if __name__ == "__main__":
             time.sleep(1)
 
     except KeyboardInterrupt:
-        # evaluation metrics
-        print("True label counts:", Counter(true_labels))
-        print("Predicted label counts:", Counter(pred_labels))
+        print("KeyboardInterrupt received. Stopping...")
 
-        if len(true_labels) > 0 and len(pred_labels) > 0:
-            accuracy = accuracy_score(true_labels, pred_labels)
-            precision = precision_score(true_labels, pred_labels, zero_division=0)
-            recall = recall_score(true_labels, pred_labels, zero_division=0)
-            f1 = f1_score(true_labels, pred_labels, zero_division=0)
-        else:
-            accuracy = precision = recall = f1 = 0.0
-
-        print(f"Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}") 
-
+    finally:
         stop_event.set()
         reader_thread.join()
+        print_metrics()
