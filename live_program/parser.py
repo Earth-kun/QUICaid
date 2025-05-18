@@ -308,6 +308,9 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         # evaluation metrics
+        print("True label counts:", Counter(true_labels))
+        print("Predicted label counts:", Counter(pred_labels))
+
         if len(true_labels) > 0 and len(pred_labels) > 0:
             accuracy = accuracy_score(true_labels, pred_labels)
             precision = precision_score(true_labels, pred_labels, zero_division=0)
