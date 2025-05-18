@@ -309,9 +309,9 @@ def print_metrics():
     print("Predicted label counts:", Counter(pred_labels))
 
     if len(true_labels) > 0 and len(pred_labels) > 0:
-        acc = accuracy_score(true_labels, pred_labels)
-        prec = precision_score(true_labels, pred_labels, zero_division=0)
-        rec = recall_score(true_labels, pred_labels, zero_division=0)
+        accuracy = accuracy_score(true_labels, pred_labels)
+        precision = precision_score(true_labels, pred_labels, zero_division=0)
+        recall = recall_score(true_labels, pred_labels, zero_division=0)
         f1 = f1_score(true_labels, pred_labels, zero_division=0)
     else:
         print("Not enough data to calculate metrics.")
