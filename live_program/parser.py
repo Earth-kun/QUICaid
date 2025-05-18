@@ -277,16 +277,20 @@ def run_prequential(classifier, flow, online=True):
     X, y = flow[:-1], flow[-1]
     try:
         if X is not None and y is not None:
+            # Ensure X is 2D and y is int
+            X = [X]
+            y = int(y)
+
             # Test first
             if isinstance(classifier, AdaptiveRandomForestClassifier):
-                y_pred = classifier.predict([X])
+                y_pred = classifier.predict(X)
                 pred_labels.append(y_pred[0])
 
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
-                classifier.partial_fit([copy.copy(X)], [y])
+                classifier.partial_fit(copy.copy(X), [y])
 
-            # evaluation
+            # Record true label
             true_labels.append(y)
 
     except BaseException as e:
