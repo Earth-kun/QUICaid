@@ -279,20 +279,18 @@ def run_prequential(classifier, flow, online=True):
         if X is not None and y is not None:
             # Test first
             if isinstance(classifier, AdaptiveRandomForestClassifier):
-                y_pred = classifier.predict(X)
-            
+                y_pred = classifier.predict([X])
+                pred_labels.append(y_pred[0])
+
             # Train incrementally
             if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
-                classifier.partial_fit(copy.copy(X), [y[0]])
+                classifier.partial_fit([copy.copy(X)], [y])
 
             # evaluation
-            true_labels.append(y[0])
-            if isinstance(classifier, AdaptiveRandomForestClassifier):
-                pred_labels.append(y_pred[0])
-            
+            true_labels.append(y)
 
     except BaseException as e:
-        print(e)
+        print("Prequential Error:", e)
 
 if __name__ == "__main__":
     try:
@@ -305,10 +303,13 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         # evaluation metrics
-        accuracy = accuracy_score(true_labels, pred_labels)
-        precision = precision_score(true_labels, pred_labels, zero_division=0)
-        recall = recall_score(true_labels, pred_labels, zero_division=0)
-        f1 = f1_score(true_labels, pred_labels, zero_division=0)
+        if len(true_labels) > 0 and len(pred_labels) > 0:
+            accuracy = accuracy_score(true_labels, pred_labels)
+            precision = precision_score(true_labels, pred_labels, zero_division=0)
+            recall = recall_score(true_labels, pred_labels, zero_division=0)
+            f1 = f1_score(true_labels, pred_labels, zero_division=0)
+        else:
+            accuracy = precision = recall = f1 = 0.0
 
         print(f"Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}") 
 
