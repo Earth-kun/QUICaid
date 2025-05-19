@@ -232,7 +232,7 @@ def process_flow():
     versions = [p['quic_version'] for p in fwd_packets + rev_packets]
 
     # Calculate flow statistics
-    flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, get_dynamic_label())
+    flow_stats = calculate_flow_statistics(fwd_packets, rev_packets, ports, asns, versions, get_dynamic_label()[0])
             
     flow_df = pd.DataFrame([flow_stats])
     flow_df.to_csv(OUTPUT_CSV, sep=',', header=False, index=False, mode='a')
@@ -279,25 +279,30 @@ def run_prequential(classifier, flow, online=True):
     try:
         if any(x is None for x in flow[:-1]):
             raise ValueError("Flow contains None values.")
+    
         X = [float(x) for x in flow[:-1]]
         y = int(flow[-1])
 
         # Make input 2D for classifier
         X_2d = [X]
-
-        # Prediction
-        if isinstance(classifier, AdaptiveRandomForestClassifier):
-            y_pred = classifier.predict(X_2d)
-            pred_labels.append(y_pred[0])
-
-        # Training
-        if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
-            print("Training on:", X_2d, "Label:", y)
+        
+        if get_dynamic_label()[1]:
+            # Pretraining
             classifier.partial_fit(copy.copy(X_2d), [y])
+        else:
+            # Prediction
+            if isinstance(classifier, AdaptiveRandomForestClassifier):
+                y_pred = classifier.predict(X_2d)
 
-        # Record label
-        true_labels.append(y)
-
+            # Training
+            if isinstance(classifier, AdaptiveRandomForestClassifier) and online:
+                print("Training on:", X_2d, "Label:", y)
+                classifier.partial_fit(copy.copy(X_2d), [y])
+            
+            true_labels.append(y)
+            if isinstance(classifier, AdaptiveRandomForestClassifier):
+                pred_labels.append(y_pred[0])
+                
     except BaseException as e:
         print("Prequential Error:", e)
         print("Bad flow sample:", flow)
@@ -330,6 +335,14 @@ def get_dynamic_label():
     try:
         with open("/tmp/label_flag.txt", "r") as f:
             value = int(f.read().strip())
+            if value == 0:
+                value = [0, False]
+            elif value == 1:
+                value = [1, False]
+            elif value == 2:
+                value = [0, True]
+            else:
+                value = [1, True]
             return value
     except:
         return 0

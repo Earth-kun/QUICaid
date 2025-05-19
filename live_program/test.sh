@@ -12,9 +12,7 @@ echo "Cleaning temp files..."
 mkfifo "$FIFO_PATH"
 touch "$FLAG_PATH"
 
-# STEP 2: BENIGN PHASE
-echo "[*] Starting benign parser..."
-echo 0 > "$FLAG_PATH"
+# STEP 2: PRE-TRAIN
 python3 /home/user2/QUIC/live_program/parser.py --timeout $TIMEOUT --ipsrc "$IP_SRC" &
 PARSER_PID=$!
 
@@ -24,14 +22,35 @@ tshark -Y quic -i ens18 -T fields \
   -e quic.version -e quic.packet_length > "$FIFO_PATH" &
 TSHARK_PID=$!
 
-# Optional: trigger benign traffic
-# ./run_benign.sh
+echo 2 > /tmp/label_flag.txt
 sleep 180
+
+echo 3 > /tmp/label_flag.txt
+# Run the attack
+# /home/user2/QUIC-attacks/aioquic/quic-loris-CVE-2022-30591.sh &
+sudo hping3 -p 443 --udp --flood 10.10.3.10 &
+ATTACK_PID=$!
+sleep 180
+
+kill $ATTACK_PID
+sleep 2
+wait $ATTACK_PID 2>/dev/null
 
 # STEP 3: ATTACK PHASE
 echo 1 > /tmp/label_flag.txt
 # Run the attack
-/home/user2/QUIC-attacks/aioquic/quic-loris-CVE-2022-30591.sh &
+# /home/user2/QUIC-attacks/aioquic/quic-loris-CVE-2022-30591.sh &
+sudo hping3 -p 443 --udp --flood 10.10.3.10 &
+ATTACK_PID=$!
+sleep 180
+
+kill $ATTACK_PID
+sleep 2
+wait $ATTACK_PID 2>/dev/null
+
+echo 0 > "$FLAG_PATH"
+# Optional: trigger benign traffic
+# ./run_benign.sh
 sleep 180
 
 
